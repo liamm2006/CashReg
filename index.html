@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+        }
+        #display {
+            font-size: 24px;
+            padding: 10px;
+            width: 150px;
+            text-align: right;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .button {
+            padding: 15px;
+            margin: 5px;
+            font-size: 18px;
+            width: 60px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 240px;
+        }
+        .category-container {
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Linke Seite mit Display und Tasten -->
+    <div>
+        <h1>Kasse für Second-Hand</h1>
+
+        <!-- Display für die aktuelle Eingabe -->
+        <input type="text" id="display" disabled placeholder="0,00 €">
+
+        <!-- Tastenfeld -->
+        <div class="button-container">
+            <div class="button" onclick="inputDigit('1')">1</div>
+            <div class="button" onclick="inputDigit('2')">2</div>
+            <div class="button" onclick="inputDigit('3')">3</div>
+            <div class="button" onclick="inputDigit('4')">4</div>
+            <div class="button" onclick="inputDigit('5')">5</div>
+            <div class="button" onclick="inputDigit('6')">6</div>
+            <div class="button" onclick="inputDigit('7')">7</div>
+            <div class="button" onclick="inputDigit('8')">8</div>
+            <div class="button" onclick="inputDigit('9')">9</div>
+            <div class="button" onclick="inputDigit('0')">0</div>
+            <div class="button" onclick="addItem()">+ Artikel</div>
+            <div class="button" onclick="showSubtotal()">Zwischen-summe</div>
+        </div>
+
+        <!-- Liste der Artikel und Zwischensumme -->
+        <div class="output" id="cart">
+            <h2>Eingefügte Artikel:</h2>
+            <ul id="itemsList"></ul>
+            <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
+        </div>
+
+        <!-- Zahlung und Wechselgeld -->
+        <h2>Zahlung</h2>
+        <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
+        <div class="button-container">
+            <div class="button" onclick="inputPayment('1')">1</div>
+            <div class="button" onclick="inputPayment('2')">2</div>
+            <div class="button" onclick="inputPayment('3')">3</div>
+            <div class="button" onclick="inputPayment('4')">4</div>
+            <div class="button" onclick="inputPayment('5')">5</div>
+            <div class="button" onclick="inputPayment('6')">6</div>
+            <div class="button" onclick="inputPayment('7')">7</div>
+            <div class="button" onclick="inputPayment('8')">8</div>
+            <div class="button" onclick="inputPayment('9')">9</div>
+            <div class="button" onclick="inputPayment('0')">0</div>
+            <div class="button" onclick="calculateChange()">Wechselgeld</div>
+        </div>
+
+        <div class="output" id="changeOutput">
+            <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
+        </div>
+    </div>
+
+    <!-- Rechte Seite mit Kategorien -->
+    <div class="category-container">
+        <h2>Kategorien</h2>
+        <button class="button" onclick="setCategory('Markenklamotten')">Markenklamotten</button>
+        <button class="button" onclick="setCategory('Heimtextil')">Heimtextil</button>
+        <button class="button" onclick="setCategory('Accessoires')">Accessoires</button>
+    </div>
+
+    <script>
+        let cart = [];
+        let subtotal = 0;
+        let currentInput = "0";
+        let paymentInput = "0";
+        let selectedCategory = "Markenklamotten";
+
+        function inputDigit(digit) {
+            currentInput = (currentInput + digit).replace(/^0+/, ""); // Fügt Ziffern hinzu und entfernt führende Nullen
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+            document.getElementById('display').value = displayValue + " €";
+        }
+
+        function addItem() {
+            const price = parseFloat((parseInt(currentInput) / 100).toFixed(2));
+            if (isNaN(price) || price <= 0) {
+                alert("Bitte geben Sie einen gültigen Preis ein.");
+                return;
+            }
+
+            cart.push({ price, category: selectedCategory });
+            subtotal += price;
+            currentInput = "0";
+            updateDisplay();
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+            cart.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} €`;
+                itemsList.appendChild(listItem);
+            });
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+        }
+
+        function showSubtotal() {
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+        }
+
+        function setCategory(category) {
+            selectedCategory = category;
+            alert("Kategorie gesetzt auf: " + category);
+        }
+
+        function inputPayment(digit) {
+            paymentInput = (paymentInput + digit).replace(/^0+/, "");
+            document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
+        }
+
+        function calculateChange() {
+            const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
+            if (isNaN(payment) || payment < subtotal) {
+                alert("Der gezahlte Betrag ist zu gering oder ungültig.");
+                return;
+            }
+
+            const change = payment - subtotal;
+            document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
+            paymentInput = "0";
+            document.getElementById('paymentDisplay').value = "";
+        }
+    </script>
+</body>
+</html>
