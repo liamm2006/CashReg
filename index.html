@@ -218,7 +218,7 @@
         <button class="category-button gelb" onclick="setCategory('Bücher')">Bücher</button>
         <button class="category-button gelb" onclick="setCategory('Spielwaren')">Spielwaren</button>
         <button class="category-button gelb" onclick="setCategory('Tonträger')">Tonträger</button>
-        <button class="category-button weiss" onclick="setCategory('Spende')">Spende</button>
+        <button class="category-button weiss" onclick="setCategory('Spende')">Spende (nur Oben)</button>
     </div>
 
     <!-- Benachrichtigungsanzeige -->
@@ -228,105 +228,101 @@
     </div>
 
     <script>
-        let cart = [];
-        let subtotal = 0;
-        let currentInput = "0";
-        let paymentInput = "0";
-        let selectedCategory = "Damen Bekleidung";
-        let multiplyCount = 1;
+ let cart = [];
+let subtotal = 0;
+let currentInput = "0";
+let paymentInput = "0";
+let selectedCategory = "Damen Bekleidung";
+let multiplyCount = 1;
 
-        function inputDigit(digit) {
-            currentInput = (currentInput + digit).replace(/^0+/, "");
-            updateDisplay();
-        }
+function inputDigit(digit) {
+    currentInput = (currentInput + digit).replace(/^0+/, "");
+    updateDisplay();
+}
 
-        function updateDisplay() {
-            const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
-            document.getElementById('display').value = displayValue + " €";
-        }
+function updateDisplay() {
+    const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+    document.getElementById('display').value = displayValue + " €";
+}
 
-        function addItem() {
-            const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
-            if (isNaN(price) || price <= 0) {
-                alert("Bitte geben Sie einen gültigen Preis ein.");
-                return;
-            }
-            cart.push({ price, category: selectedCategory });
-            subtotal += price;
-            currentInput = "0";
-            multiplyCount = 1;
-            updateDisplay();
-            updateCartDisplay();
-        }
+function addItem() {
+    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
+    if (isNaN(price) || price <= 0) {
+        alert("Bitte geben Sie einen gültigen Preis ein.");
+        return;
+    }
+    cart.push({ price, category: selectedCategory });
+    subtotal += price;
+    currentInput = "0";
+    multiplyCount = 1;
+    updateDisplay();
+    updateCartDisplay();
+}
 
-        function updateCartDisplay() {
-            const itemsList = document.getElementById('itemsList');
-            itemsList.innerHTML = '';
-            cart.forEach((item, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} €`;
-                itemsList.appendChild(listItem);
-            });
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
-        }
+function updateCartDisplay() {
+    const itemsList = document.getElementById('itemsList');
+    itemsList.innerHTML = '';
+    cart.forEach((item, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} €`;
+        itemsList.appendChild(listItem);
+    });
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+}
 
-        function multiply() {
-            const multiplier = parseInt(currentInput) || 1;
-            multiplyCount = multiplier;
-            currentInput = "0";
-            updateDisplay();
-        }
+function multiply() {
+    const multiplier = parseInt(currentInput) || 1;
+    multiplyCount = multiplier;
+    currentInput = "0";
+    updateDisplay();
+}
 
-        function clearEntry() {
-            currentInput = "0";
-            updateDisplay();
-        }
+function clearEntry() {
+    currentInput = "0";
+    updateDisplay();
+}
 
-        function setCategory(category) {
-            selectedCategory = category;
-            alert("Kategorie gesetzt auf: " + category);
-        }
+// Funktion zum Setzen der Kategorie
+function setCategory(category) {
+    selectedCategory = category;
+    showNotification("Kategorie gesetzt auf: " + category);
+}
 
-        function inputPayment(digit) {
-            paymentInput = (paymentInput + digit).replace(/^0+/, "");
-            document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
-        }
+// Funktion zum Zurücksetzen der Kategorie
+function clearCategory() {
+    selectedCategory = "Damen Bekleidung"; // Setze die Kategorie zurück
+    showNotification("Kategorie zurückgesetzt");
+}
 
-        function calculateChange() {
-            const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
-            if (isNaN(payment) || payment < subtotal) {
-                alert("Der gezahlte Betrag ist zu gering oder ungültig.");
-                return;
-            }
-            const change = payment - subtotal;
-            document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
-            paymentInput = "0";
-            document.getElementById('paymentDisplay').value = "";
-        }
+function inputPayment(digit) {
+    paymentInput = (paymentInput + digit).replace(/^0+/, "");
+    document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
+}
 
-               // Funktion zum Setzen der Kategorie
-               function setCategory(category) {
-            showNotification(category);
-        }
+function calculateChange() {
+    const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
+    if (isNaN(payment) || payment < subtotal) {
+        alert("Der gezahlte Betrag ist zu gering oder ungültig.");
+        return;
+    }
+    const change = payment - subtotal;
+    document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
+    paymentInput = "0";
+    document.getElementById('paymentDisplay').value = "";
+}
 
-        // Funktion zum Zurücksetzen der Kategorie
-        function clearCategory() {
-            showNotification("Kategorie zurückgesetzt");
-        }
-
-        // Funktion zum Anzeigen der Benachrichtigung
-        function showNotification(message) {
-            const notification = document.getElementById("notification");
-            notification.textContent = message;
-            notification.classList.add("show");
-            setTimeout(() => {
-                notification.classList.add("slide-out");
-            }, 3000);
-            setTimeout(() => {
-                notification.classList.remove("show", "slide-out");
-            }, 4000);
-        }
-
+// Funktion zum Anzeigen der Benachrichtigung
+function showNotification(message) {
+    const notification = document.getElementById("notification");
+    notification.textContent = message;
+    notification.classList.add("show");
+    setTimeout(() => {
+        notification.classList.add("slide-out");
+    }, 3000);
+    setTimeout(() => {
+        notification.classList.remove("show", "slide-out");
+    }, 4000);
+}
 
     </script>
 </body>
