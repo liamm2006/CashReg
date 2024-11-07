@@ -4,45 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kasse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Merriweather Sans', sans-serif;
             margin: 20px;
             display: flex;
+            background-color: #f5f5f5;
+            color: #333;
         }
-        #display {
+        h1, h2 {
+            color: #444;
+        }
+        #display, #paymentDisplay {
             font-size: 24px;
-            padding: 10px;
-            width: 150px;
+            padding: 15px;
+            width: 100%;
             text-align: right;
-            border: 1px solid #ccc;
+            border: none;
             margin-bottom: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
         .button {
             padding: 15px;
             margin: 5px;
             font-size: 18px;
-            width: 60px;
+            width: 70px;
             cursor: pointer;
             text-align: center;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            background-color: #6200ea;
+            transition: background-color 0.2s ease;
+        }
+        .button:hover {
+            background-color: #3700b3;
         }
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            max-width: 240px;
+            max-width: 280px;
+            gap: 5px;
         }
         .category-container {
             margin-left: 20px;
             display: flex;
             flex-direction: column;
+            gap: 5px;
         }
         .output {
             margin-top: 20px;
         }
+        .category-button {
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+        }
+        /* Kategorien-Farben */
+        .hellblau { background-color: #03a9f4; }
+        .hellrot { background-color: #ff5722; }
+        .blaugrau { background-color: #607d8b; }
+        .gelb { background-color: #ffc107; }
+        .weiss { background-color: #ffffff; color: #000; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <!-- Linke Seite mit Display und Tasten -->
     <div>
         <h1>Kasse für Second-Hand</h1>
 
@@ -61,8 +94,10 @@
             <div class="button" onclick="inputDigit('8')">8</div>
             <div class="button" onclick="inputDigit('9')">9</div>
             <div class="button" onclick="inputDigit('0')">0</div>
+            <div class="button" onclick="multiply()">x</div>
             <div class="button" onclick="addItem()">+ Artikel</div>
-            <div class="button" onclick="showSubtotal()">Zwischen-summe</div>
+            <div class="button" onclick="clearEntry()">Löschen</div>
+            <div class="button" onclick="showSubtotal()">Zwischensumme</div>
         </div>
 
         <!-- Liste der Artikel und Zwischensumme -->
@@ -97,9 +132,19 @@
     <!-- Rechte Seite mit Kategorien -->
     <div class="category-container">
         <h2>Kategorien</h2>
-        <button class="button" onclick="setCategory('Markenklamotten')">Markenklamotten</button>
-        <button class="button" onclick="setCategory('Heimtextil')">Heimtextil</button>
-        <button class="button" onclick="setCategory('Accessoires')">Accessoires</button>
+        <button class="category-button hellblau" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
+        <button class="category-button hellblau" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
+        <button class="category-button hellblau" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
+        <button class="category-button hellblau" onclick="setCategory('Accessoires')">Accessoires</button>
+        <button class="category-button hellblau" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
+        <button class="category-button hellrot" onclick="setCategory('Porzellan')">Porzellan</button>
+        <button class="category-button hellrot" onclick="setCategory('Glas')">Glas</button>
+        <button class="category-button hellrot" onclick="setCategory('Haushalt')">Haushalt</button>
+        <button class="category-button blaugrau" onclick="setCategory('Deko')">Deko</button>
+        <button class="category-button gelb" onclick="setCategory('Bücher')">Bücher</button>
+        <button class="category-button gelb" onclick="setCategory('Spielwaren')">Spielwaren</button>
+        <button class="category-button gelb" onclick="setCategory('Tonträger')">Tonträger</button>
+        <button class="category-button weiss" onclick="setCategory('Spende')">Spende</button>
     </div>
 
     <script>
@@ -107,10 +152,11 @@
         let subtotal = 0;
         let currentInput = "0";
         let paymentInput = "0";
-        let selectedCategory = "Markenklamotten";
+        let selectedCategory = "Damen Bekleidung";
+        let multiplyCount = 1;
 
         function inputDigit(digit) {
-            currentInput = (currentInput + digit).replace(/^0+/, ""); // Fügt Ziffern hinzu und entfernt führende Nullen
+            currentInput = (currentInput + digit).replace(/^0+/, "");
             updateDisplay();
         }
 
@@ -120,15 +166,15 @@
         }
 
         function addItem() {
-            const price = parseFloat((parseInt(currentInput) / 100).toFixed(2));
+            const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
             if (isNaN(price) || price <= 0) {
                 alert("Bitte geben Sie einen gültigen Preis ein.");
                 return;
             }
-
             cart.push({ price, category: selectedCategory });
             subtotal += price;
             currentInput = "0";
+            multiplyCount = 1;
             updateDisplay();
             updateCartDisplay();
         }
@@ -144,8 +190,16 @@
             document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
         }
 
-        function showSubtotal() {
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+        function multiply() {
+            const multiplier = parseInt(currentInput) || 1;
+            multiplyCount = multiplier;
+            currentInput = "0";
+            updateDisplay();
+        }
+
+        function clearEntry() {
+            currentInput = "0";
+            updateDisplay();
         }
 
         function setCategory(category) {
@@ -164,7 +218,6 @@
                 alert("Der gezahlte Betrag ist zu gering oder ungültig.");
                 return;
             }
-
             const change = payment - subtotal;
             document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
             paymentInput = "0";
