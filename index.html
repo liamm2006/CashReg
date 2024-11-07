@@ -17,6 +17,7 @@
             color: #444;
         }
         #display, #paymentDisplay {
+            font-family: 'Merriweather Sans', sans-serif;
             font-size: 24px;
             padding: 15px;
             width: 100%;
@@ -30,7 +31,7 @@
         .button {
             padding: 15px;
             margin: 5px;
-            font-size: 18px;
+            font-size: 25px;
             width: 70px;
             cursor: pointer;
             text-align: center;
@@ -59,8 +60,9 @@
             margin-top: 20px;
         }
         .category-button {
+            font-family: 'Merriweather Sans', sans-serif;
             padding: 15px;
-            font-size: 16px;
+            font-size: 20px;
             cursor: pointer;
             border: none;
             border-radius: 8px;
@@ -73,11 +75,82 @@
         .blaugrau { background-color: #607d8b; }
         .gelb { background-color: #ffc107; }
         .weiss { background-color: #ffffff; color: #000; border: 1px solid #ccc; }
+
+               /* Custom Notification Popup */
+               .notification {
+            visibility: hidden;
+            opacity: 0;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: visibility 0s, opacity 0.5s ease;
+            z-index: 100;
+        }
+        .notification.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Green progress bar */
+        .progress-bar {
+            position: absolute;
+            top: 50;
+            left: 50;
+            width: 50;
+            height: 40px;
+            background-color: #4CAF50;
+            animation: progress 3s linear forwards;
+        }
+
+        .green-button {
+    background-color: #4CAF50; /* Grüner Hintergrund */
+    color: #ffffff; /* Weiße Schriftfarbe */
+}
+
+.green-button:hover {
+    background-color: #45a049; /* Etwas dunkleres Grün beim Hover */
+}
+
+.red-button {
+    background-color: #ff0000; /* Grüner Hintergrund */
+    color: #ffffff; /* Weiße Schriftfarbe */
+}
+
+.red-button:hover {
+    background-color: #8f0000; /* Etwas dunkleres Grün beim Hover */
+}
+
+
+        @keyframes progress {
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Slide-out animation for notification */
+        .notification.slide-out {
+            animation: slideOut 1s forwards;
+        }
+
+        @keyframes slideOut {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div>
-        <h1>Kasse für Second-Hand</h1>
+        <h1>CashReg 1.0</h1>
 
         <!-- Display für die aktuelle Eingabe -->
         <input type="text" id="display" disabled placeholder="0,00 €">
@@ -95,9 +168,9 @@
             <div class="button" onclick="inputDigit('9')">9</div>
             <div class="button" onclick="inputDigit('0')">0</div>
             <div class="button" onclick="multiply()">x</div>
-            <div class="button" onclick="addItem()">+ Artikel</div>
-            <div class="button" onclick="clearEntry()">Löschen</div>
-            <div class="button" onclick="showSubtotal()">Zwischensumme</div>
+            <div class="button green-button" onclick="addItem()">Artikel +</div>
+            <div class="button red-button" onclick="clearEntry()">Löschen</div>
+            <div class="button" onclick="showSubtotal()">ZWS</div>
         </div>
 
         <!-- Liste der Artikel und Zwischensumme -->
@@ -108,7 +181,7 @@
         </div>
 
         <!-- Zahlung und Wechselgeld -->
-        <h2>Zahlung</h2>
+        <h2>Zahlung (Geld von Kunden)</h2>
         <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
         <div class="button-container">
             <div class="button" onclick="inputPayment('1')">1</div>
@@ -135,6 +208,7 @@
         <button class="category-button hellblau" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
         <button class="category-button hellblau" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
         <button class="category-button hellblau" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
+        <button class="category-button hellblau" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
         <button class="category-button hellblau" onclick="setCategory('Accessoires')">Accessoires</button>
         <button class="category-button hellblau" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
         <button class="category-button hellrot" onclick="setCategory('Porzellan')">Porzellan</button>
@@ -145,6 +219,12 @@
         <button class="category-button gelb" onclick="setCategory('Spielwaren')">Spielwaren</button>
         <button class="category-button gelb" onclick="setCategory('Tonträger')">Tonträger</button>
         <button class="category-button weiss" onclick="setCategory('Spende')">Spende</button>
+    </div>
+
+    <!-- Benachrichtigungsanzeige -->
+    <div id="notification" class="notification">
+        Kategorie ausgewählt!
+        <div class="progress-bar"></div>
     </div>
 
     <script>
@@ -223,6 +303,31 @@
             paymentInput = "0";
             document.getElementById('paymentDisplay').value = "";
         }
+
+               // Funktion zum Setzen der Kategorie
+               function setCategory(category) {
+            showNotification(category);
+        }
+
+        // Funktion zum Zurücksetzen der Kategorie
+        function clearCategory() {
+            showNotification("Kategorie zurückgesetzt");
+        }
+
+        // Funktion zum Anzeigen der Benachrichtigung
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.classList.add("show");
+            setTimeout(() => {
+                notification.classList.add("slide-out");
+            }, 3000);
+            setTimeout(() => {
+                notification.classList.remove("show", "slide-out");
+            }, 4000);
+        }
+
+
     </script>
 </body>
 </html>
