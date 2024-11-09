@@ -19,64 +19,70 @@
     <div id="practiceContainer">
         <p id="customerOrder">Kunde wartet auf Bestellung...</p>
         <button class="button" onclick="serveCustomer()">Kunde bedienen</button>
+        <div id="customerOrder"></div>
+<div id="customerPayment"></div>
     </div>
 
     <script>
 const products = [
     // Bekleidung allgemein (1 bis 10 Euro)
-    { name: "Pullover", price: 8.99, brand: false },
-    { name: "Bluse", price: 5.99, brand: false },
-    { name: "Shorts", price: 6.99, brand: false },
-    { name: "Rock", price: 7.49, brand: false },
-    { name: "Schal", price: 3.99, brand: false },
-    { name: "Strickjacke", price: 9.49, brand: false },
+    { name: "Pullover", price: 8.90, brand: false },
+    { name: "Bluse", price: 5.40, brand: false },
+    { name: "Shorts", price: 6.60, brand: false },
+    { name: "Rock", price: 7.20, brand: false },
+    { name: "Schal", price: 3.40, brand: false },
+    { name: "Strickjacke", price: 9.50, brand: false },
     
     // Markenbekleidung (10 bis 60 Euro)
-    { name: "Designer-Jeans", price: 39.99, brand: true },
-    { name: "Marken-T-Shirt", price: 14.99, brand: true },
-    { name: "Marken-Jacke", price: 59.99, brand: true },
-    { name: "Lederjacke", price: 49.99, brand: true },
-    { name: "Marken-Sneaker", price: 44.99, brand: true },
-    { name: "Designer-Mantel", price: 55.00, brand: true },
+    { name: "Designer-Jeans", price: 39.90, brand: true },
+    { name: "Marken-T-Shirt", price: 14.50, brand: true },
+    { name: "Marken-Jacke", price: 59.20, brand: true },
+    { name: "Lederjacke", price: 49.10, brand: true },
+    { name: "Marken-Sneaker", price: 44.70, brand: true },
+    { name: "Designer-Mantel", price: 55.90, brand: true },
     
     // Deko-Artikel (meistens im Cent-Bereich)
-    { name: "Kerze", price: 0.99, brand: false },
+    { name: "Kerze", price: 0.90, brand: false },
     { name: "Blumentopf", price: 1.49, brand: false },
-    { name: "Vase", price: 2.99, brand: false },
-    { name: "Kerzenhalter", price: 1.99, brand: false },
-    { name: "Tischdecke", price: 0.49, brand: false },
-    { name: "Bilderrahmen", price: 1.99, brand: false },
+    { name: "Vase", price: 3.00, brand: false },
+    { name: "Kerzenhalter", price: 1.40, brand: false },
+    { name: "Tischdecke", price: 0.50, brand: false },
+    { name: "Bilderrahmen", price: 2.00, brand: false },
     
     // Haushalt (1 bis 5 Euro)
-    { name: "Glas", price: 1.29, brand: false },
-    { name: "Teller", price: 1.99, brand: false },
-    { name: "Besteck-Set", price: 3.49, brand: false },
-    { name: "Tasse", price: 0.99, brand: false },
-    { name: "Küchenschüssel", price: 2.49, brand: false },
-    { name: "Kaffeekanne", price: 3.99, brand: false },
+    { name: "Glas", price: 1.30, brand: false },
+    { name: "Teller", price: 2.00, brand: false },
+    { name: "Besteck-Set", price: 4.40, brand: false },
+    { name: "Tasse", price: 1.00, brand: false },
+    { name: "Küchenschüssel", price: 2.50, brand: false },
+    { name: "Kaffeekanne", price: 5.60, brand: false },
     
     // Spielwaren (meistens bis 10 Euro)
-    { name: "Puzzle", price: 4.99, brand: false },
-    { name: "Plüschbär", price: 2.99, brand: false },
-    { name: "Brettspiel", price: 7.99, brand: false },
-    { name: "Spielzeugauto", price: 1.49, brand: false },
-    { name: "Marken-Puppe", price: 9.99, brand: true },
+    { name: "Puzzle", price: 4.20, brand: false },
+    { name: "Plüschbär", price: 2.50, brand: false },
+    { name: "Brettspiel", price: 7.70, brand: false },
+    { name: "Spielzeugauto", price: 1.50, brand: false },
+    { name: "Marken-Puppe", price: 10.00, brand: true },
     
     // Accessoires (2 bis 15 Euro)
-    { name: "Handtasche", price: 8.99, brand: false },
-    { name: "Marken-Rucksack", price: 14.99, brand: true },
-    { name: "Armband", price: 2.49, brand: false },
-    { name: "Kette", price: 3.49, brand: false },
-    { name: "Sonnenbrille", price: 5.99, brand: false },
-    { name: "Marken-Gürtel", price: 12.99, brand: true },
+    { name: "Handtasche", price: 8.90, brand: false },
+    { name: "Marken-Rucksack", price: 14.00, brand: true },
+    { name: "Armband", price: 0.50, brand: false },
+    { name: "Kette", price: 1.50, brand: false },
+    { name: "Sonnenbrille", price: 3.50, brand: false },
+    { name: "Marken-Gürtel", price: 13.00, brand: true },
     
     // Bücher und Tonträger (unter 5 Euro)
-    { name: "Roman", price: 2.99, brand: false },
-    { name: "Kinderbuch", price: 1.49, brand: false },
-    { name: "CD-Album", price: 1.99, brand: false },
-    { name: "DVD", price: 2.99, brand: false },
-    { name: "Bildband", price: 4.49, brand: false },
+    { name: "Roman", price: 1.00, brand: false },
+    { name: "Kinderbuch", price: 0.10, brand: false },
+    { name: "CD-Album", price: 1.90, brand: false },
+    { name: "DVD", price: 2.90, brand: false },
+    { name: "Bildband", price: 4.40, brand: false },
 
+        // Gratis
+    { name: "Buch GRATIS", price: 0.00, brand: false },
+    { name: "Kinderbuch GRATIS", price: 0.00, brand: false },
+    { name: "Spielzeug GRATIS", price: 0.00, brand: false },
 ];
 
 
@@ -86,10 +92,9 @@ function typeWriter(text, elementId, speed = 50) {
         element.innerHTML = ""; // Setzt den Text zurück
 
         function type() {
-            // Verarbeitet HTML-Tags korrekt
             if (i < text.length) {
                 let currentChar = text.charAt(i);
-                
+
                 // HTML-Tag sofort einsetzen
                 if (currentChar === "<") {
                     const endTag = text.indexOf(">", i) + 1;
@@ -99,7 +104,7 @@ function typeWriter(text, elementId, speed = 50) {
                     element.innerHTML += currentChar;
                     i++;
                 }
-                
+
                 setTimeout(type, speed);
             }
         }
@@ -107,12 +112,23 @@ function typeWriter(text, elementId, speed = 50) {
     }
 
     function serveCustomer() {
-        const product = products[Math.floor(Math.random() * products.length)];
-        const greenDot = product.brand ? '<span class="greenDot">●</span>' : '';
-        const text = `Kunde möchte: ${product.name} - <span id="price">${product.price.toFixed(2)} €</span> ${greenDot}`;
+        const numItems = Math.floor(Math.random() * 15) + 1; // Zufällige Anzahl von Artikeln (1 bis 5)
+        let orderText = "Kunde möchte:<br>";
+        let totalPrice = 0;
 
-        // Typewriter-Effekt anwenden
-        typeWriter(text, "customerOrder");
+        for (let i = 0; i < numItems; i++) {
+            const product = products[Math.floor(Math.random() * products.length)];
+            const greenDot = product.brand ? '<span class="greenDot">●</span>' : '';
+            totalPrice += product.price;
+
+            orderText += `${product.name} - <span>${product.price.toFixed(2)} €</span> ${greenDot}<br>`;
+        }
+
+        typeWriter(orderText, "customerOrder");
+
+        // Zufälliger Betrag, den der Kunde gibt (leicht über dem Gesamtpreis)
+        const customerPayment = (Math.ceil(totalPrice) + Math.floor(Math.random() * 10) + 1).toFixed(2);
+        typeWriter(`Kunde gibt dir: <span id="payment">${customerPayment} €</span>`, "customerPayment");
     }
     </script>
 
