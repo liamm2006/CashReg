@@ -3,329 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasse</title>
+    <title>CashReg 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Merriweather Sans', sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 20px;
             display: flex;
-            background-color: #f5f5f5;
+            background-color: #000000;
             color: #333;
+            justify-content: center;
         }
+        
+        .container {
+            display: flex;
+            max-width: 1200px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .left-panel, .right-panel {
+            padding: 20px;
+        }
+        
+        .left-panel {
+            flex: 2;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .right-panel {
+            flex: 1;
+            background-color: #f9f9f9;
+        }
+
         h1, h2 {
             color: #444;
+            margin-bottom: 20px;
         }
+
         #display, #paymentDisplay {
-            font-family: 'Merriweather Sans', sans-serif;
-            font-size: 24px;
+            font-size: 28px;
             padding: 15px;
             width: 100%;
             text-align: right;
             border: none;
-            margin-bottom: 10px;
-            background-color: #ffffff;
+            background-color: #ecf0f1;
             border-radius: 8px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
-        .button {
-            padding: 15px;
-            margin: 5px;
-            font-size: 25px;
-            width: 70px;
-            cursor: pointer;
-            text-align: center;
-            border: none;
-            border-radius: 8px;
-            color: #ffffff;
-            background-color: #000000;
-            transition: background-color 0.2s ease;
-        }
-        .button:hover {
-            background-color: #3e3e3e;
-        }
+
         .button-container {
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 280px;
-            gap: 5px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
-        .category-container {
-            margin-left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .output {
-            margin-top: 20px;
-            font-size: 17px;
-            text-decoration:underline
-        }
-        .category-button {
-            font-family: 'Merriweather Sans', sans-serif;
+
+        .button {
             padding: 15px;
             font-size: 20px;
             cursor: pointer;
             border: none;
             border-radius: 8px;
-            text-align: center;
+            background-color: #3d3d3d;
             color: #fff;
+            transition: all 0.3s ease;
         }
-        /* Kategorien-Farben */
-        .hellblau { background-color: #03a9f4; }
-        .hellrot { background-color: #ff5722; }
-        .blaugrau { background-color: #607d8b; }
-        .gelb { background-color: #ffc107; }
-        .weiss { background-color: #ffffff; color: #000; border: 1px solid #ccc; }
 
-               /* Custom Notification Popup */
-               .notification {
-            visibility: hidden;
-            opacity: 0;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 18px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            transition: visibility 0s, opacity 0.5s ease;
-            z-index: 100;
-        }
-        .notification.show {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        /* Green progress bar */
-        .progress-bar {
-            position: absolute;
-            top: 50;
-            left: 50;
-            width: 50;
-            height: 40px;
-            background-color: #4CAF50;
-            animation: progress 3s linear forwards;
+        .button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
         }
 
         .green-button {
-    background-color: #4CAF50; /* Grüner Hintergrund */
-    color: #ffffff; /* Weiße Schriftfarbe */
-}
-
-.green-button:hover {
-    background-color: #45a049; /* Etwas dunkleres Grün beim Hover */
-}
-
-.red-button {
-    background-color: #ff0000; /* Grüner Hintergrund */
-    color: #ffffff; /* Weiße Schriftfarbe */
-}
-
-.red-button:hover {
-    background-color: #8f0000; /* Etwas dunkleres Grün beim Hover */
-}
-
-
-        @keyframes progress {
-            to {
-                width: 100%;
-            }
+            background-color: #2ecc71;
         }
 
-        /* Slide-out animation for notification */
-        .notification.slide-out {
-            animation: slideOut 1s forwards;
+        .green-button:hover {
+            background-color: #27ae60;
         }
 
-        @keyframes slideOut {
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
+        .red-button {
+            background-color: #e74c3c;
         }
 
+        .red-button:hover {
+            background-color: #c0392b;
+        }
+
+        .category-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: left;
+            border: none;
+            border-radius: 8px;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .category-button:hover {
+            background-color: #bdc3c7;
+        }
+
+        #cart {
+            margin-top: 30px;
+        }
+
+        #itemsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #itemsList li {
+            padding: 10px;
+            background-color: #ecf0f1;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        #itemsList li button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: visibility 0s, opacity 0.5s ease, transform 0.5s ease;
+    z-index: 100;
+    transform: translateX(0);
+}
+
+.notification.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.notification.info {
+    background-color: #333333;
+    color: #fff;
+}
+
+.notification.slide-out {
+    transform: translateX(120%);
+}
+
+.notification.alert {
+    background-color: #f44336;
+    color: #fff;
+    animation: blink 0.5s linear infinite;
+}
+
+@keyframes slideOut {
+    to { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+        
     </style>
 </head>
 <body>
-    <div>
-        <h1>CashReg 1.0</h1>
-
-        <!-- Display für die aktuelle Eingabe -->
-        <input type="text" id="display" disabled placeholder="0,00 €">
-
-        <!-- Tastenfeld -->
-        <div class="button-container">
-            <div class="button" onclick="inputDigit('1')">1</div>
-            <div class="button" onclick="inputDigit('2')">2</div>
-            <div class="button" onclick="inputDigit('3')">3</div>
-            <div class="button" onclick="inputDigit('4')">4</div>
-            <div class="button" onclick="inputDigit('5')">5</div>
-            <div class="button" onclick="inputDigit('6')">6</div>
-            <div class="button" onclick="inputDigit('7')">7</div>
-            <div class="button" onclick="inputDigit('8')">8</div>
-            <div class="button" onclick="inputDigit('9')">9</div>
-            <div class="button" onclick="inputDigit('0')">0</div>
-            <div class="button" onclick="multiply()">x</div>
-            <div class="button green-button" onclick="addItem()">Artikel +</div>
-            <div class="button red-button" onclick="clearEntry()">Löschen</div>
-            <div class="button" onclick="showSubtotal()">ZWS</div>
+    <div class="container">
+        <div class="left-panel">
+            <h1>CashReg 2.0</h1>
+            <input type="text" id="display" disabled placeholder="0,00 €">
+            <div class="button-container">
+                <button class="button" onclick="inputDigit('7')">7</button>
+                <button class="button" onclick="inputDigit('8')">8</button>
+                <button class="button" onclick="inputDigit('9')">9</button>
+                <button class="button" onclick="inputDigit('4')">4</button>
+                <button class="button" onclick="inputDigit('5')">5</button>
+                <button class="button" onclick="inputDigit('6')">6</button>
+                <button class="button" onclick="inputDigit('1')">1</button>
+                <button class="button" onclick="inputDigit('2')">2</button>
+                <button class="button" onclick="inputDigit('3')">3</button>
+                <button class="button" onclick="inputDigit('0')">0</button>
+                <button class="button" onclick="multiply()">x</button>
+                <button class="button green-button" onclick="addItem()">Artikel +</button>
+                <button class="button red-button" onclick="clearEntry()">Löschen</button>
+                <button class="button" onclick="showSubtotal()">ZWS</button>
+                <button class="button" onclick="resetTransaction()">Reset</button>
+            </div>
+            <div id="cart">
+                <h2>Eingefügte Artikel:</h2>
+                <ul id="itemsList"></ul>
+                <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
+            </div>
+            <h2>Zahlung</h2>
+            <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
+            <div class="button-container">
+                <button class="button" onclick="inputPayment('1')">1</button>
+                <button class="button" onclick="inputPayment('2')">2</button>
+                <button class="button" onclick="inputPayment('3')">3</button>
+                <button class="button" onclick="inputPayment('4')">4</button>
+                <button class="button" onclick="inputPayment('5')">5</button>
+                <button class="button" onclick="inputPayment('6')">6</button>
+                <button class="button" onclick="inputPayment('7')">7</button>
+                <button class="button" onclick="inputPayment('8')">8</button>
+                <button class="button" onclick="inputPayment('9')">9</button>
+                <button class="button" onclick="inputPayment('0')">0</button>
+                <button class="button green-button" onclick="calculateChange()">Wechselgeld</button>
+            </div>
+            <div id="changeOutput">
+                <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
+            </div>
         </div>
-
-        <!-- Liste der Artikel und Zwischensumme -->
-        <div class="output" id="cart">
-            <h2>Eingefügte Artikel:</h2>
-            <ul id="itemsList"></ul>
-            <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
-        </div>
-
-        <!-- Zahlung und Wechselgeld -->
-        <h2>Zahlung (Geld von Kunden)</h2>
-        <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
-        <div class="button-container">
-            <div class="button" onclick="inputPayment('1')">1</div>
-            <div class="button" onclick="inputPayment('2')">2</div>
-            <div class="button" onclick="inputPayment('3')">3</div>
-            <div class="button" onclick="inputPayment('4')">4</div>
-            <div class="button" onclick="inputPayment('5')">5</div>
-            <div class="button" onclick="inputPayment('6')">6</div>
-            <div class="button" onclick="inputPayment('7')">7</div>
-            <div class="button" onclick="inputPayment('8')">8</div>
-            <div class="button" onclick="inputPayment('9')">9</div>
-            <div class="button" onclick="inputPayment('0')">0</div>
-            <div class="button" onclick="calculateChange()">Wechselgeld</div>
-        </div>
-
-        <div class="output" id="changeOutput">
-            <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
+        <div class="right-panel">
+            <h2>Kategorien</h2>
+            <button class="category-button" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
+            <button class="category-button" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
+            <button class="category-button" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
+            <button class="category-button" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
+            <button class="category-button" onclick="setCategory('Accessoires')">Accessoires</button>
+            <button class="category-button" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
+            <button class="category-button" onclick="setCategory('Porzellan')">Porzellan</button>
+            <button class="category-button" onclick="setCategory('Glas')">Glas</button>
+            <button class="category-button" onclick="setCategory('Haushalt')">Haushalt</button>
+            <button class="category-button" onclick="setCategory('Deko')">Deko</button>
+            <button class="category-button" onclick="setCategory('Bücher')">Bücher</button>
+            <button class="category-button" onclick="setCategory('Spielwaren')">Spielwaren</button>
+            <button class="category-button" onclick="setCategory('Tonträger')">Tonträger</button>
+            <button class="category-button" onclick="setCategory('Spende')">Spende (nur Oben)</button>
         </div>
     </div>
-
-    <!-- Rechte Seite mit Kategorien -->
-    <div class="category-container">
-        <h2>Kategorien</h2>
-        <button class="category-button hellblau" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
-        <button class="category-button hellblau" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
-        <button class="category-button hellblau" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
-        <button class="category-button hellblau" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
-        <button class="category-button hellblau" onclick="setCategory('Accessoires')">Accessoires</button>
-        <button class="category-button hellblau" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
-        <button class="category-button hellrot" onclick="setCategory('Porzellan')">Porzellan</button>
-        <button class="category-button hellrot" onclick="setCategory('Glas')">Glas</button>
-        <button class="category-button hellrot" onclick="setCategory('Haushalt')">Haushalt</button>
-        <button class="category-button blaugrau" onclick="setCategory('Deko')">Deko</button>
-        <button class="category-button gelb" onclick="setCategory('Bücher')">Bücher</button>
-        <button class="category-button gelb" onclick="setCategory('Spielwaren')">Spielwaren</button>
-        <button class="category-button gelb" onclick="setCategory('Tonträger')">Tonträger</button>
-        <button class="category-button weiss" onclick="setCategory('Spende')">Spende (nur Oben)</button>
-    </div>
-
-    <!-- Benachrichtigungsanzeige -->
-    <div id="notification" class="notification">
-        Kategorie ausgewählt!
-        <div class="progress-bar"></div>
-    </div>
-
+    <div id="notification" class="notification"></div>
     <script>
- let cart = [];
-let subtotal = 0;
-let currentInput = "0";
-let paymentInput = "0";
-let selectedCategory = "Damen Bekleidung";
-let multiplyCount = 1;
+        let cart = [];
+        let subtotal = 0;
+        let currentInput = "0";
+        let paymentInput = "0";
+        let selectedCategory = "Damen Bekleidung";
+        let multiplyCount = 1;
 
-function inputDigit(digit) {
-    currentInput = (currentInput + digit).replace(/^0+/, "");
-    updateDisplay();
-}
+        function inputDigit(digit) {
+            currentInput = (currentInput + digit).replace(/^0+/, "");
+            updateDisplay();
+        }
 
-function updateDisplay() {
-    const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
-    document.getElementById('display').value = displayValue + " €";
-}
+        function updateDisplay() {
+            const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+            document.getElementById('display').value = displayValue + " €";
+        }
 
-function addItem() {
-    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
+        function addItem() {
+    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2));
     if (isNaN(price) || price <= 0) {
-        alert("Bitte geben Sie einen gültigen Preis ein.");
+        showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
         return;
     }
+    cart.push({ 
+        price: price * multiplyCount, 
+        category: selectedCategory, 
+        quantity: multiplyCount 
+    });
+    subtotal += price * multiplyCount;
+    currentInput = "0";
+    multiplyCount = 1;
+    updateDisplay();
+    updateCartDisplay();
+    showNotification("Artikel hinzugefügt!");
+}
+
     cart.push({ price, category: selectedCategory });
     subtotal += price;
     currentInput = "0";
     multiplyCount = 1;
     updateDisplay();
     updateCartDisplay();
-}
+    showNotification("Artikel hinzugefügt: " + selectedCategory + " - " + price.toFixed(2).replace(".", ",") + " €", 'info');
 
 function updateCartDisplay() {
     const itemsList = document.getElementById('itemsList');
     itemsList.innerHTML = '';
     cart.forEach((item, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} €`;
+        listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
         itemsList.appendChild(listItem);
     });
     document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
 }
 
-function multiply() {
-    const multiplier = parseInt(currentInput) || 1;
-    multiplyCount = multiplier;
-    currentInput = "0";
-    updateDisplay();
-}
+        function removeItem(index) {
+            const removedItem = cart.splice(index, 1)[0];
+            subtotal -= removedItem.price;
+            updateCartDisplay();
+            showNotification("Artikel entfernt!");
+        }
 
-function clearEntry() {
-    currentInput = "0";
-    updateDisplay();
-}
+        function multiply() {
+            const multiplier = parseInt(currentInput) || 1;
+            multiplyCount = multiplier;
+            currentInput = "0";
+            updateDisplay();
+        }
 
-// Funktion zum Setzen der Kategorie
-function setCategory(category) {
+        function clearEntry() {
+            currentInput = "0";
+            updateDisplay();
+        }
+
+        function setCategory(category) {
     selectedCategory = category;
-    showNotification("Kategorie gesetzt auf: " + category);
+    showNotification("Kategorie gesetzt auf: " + category, 'info');
 }
 
-// Funktion zum Zurücksetzen der Kategorie
-function clearCategory() {
-    selectedCategory = "Damen Bekleidung"; // Setze die Kategorie zurück
-    showNotification("Kategorie zurückgesetzt");
-}
+        function showSubtotal() {
+            currentInput = (subtotal * 100).toString();
+            updateDisplay();
+            showNotification("Zwischensumme: " + subtotal.toFixed(2).replace(".", ",") + " €");
+        }
 
-function inputPayment(digit) {
-    paymentInput = (paymentInput + digit).replace(/^0+/, "");
-    document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
-}
+        function inputPayment(digit) {
+            paymentInput = (paymentInput + digit).replace(/^0+/, "");
+            document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
+        }
 
-function calculateChange() {
+        function calculateChange() {
     const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
     if (isNaN(payment) || payment < subtotal) {
-        alert("Der gezahlte Betrag ist zu gering oder ungültig.");
+        showNotification("Der gezahlte Betrag ist zu gering oder ungültig.", 'alert');
         return;
     }
     const change = payment - subtotal;
     document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
     paymentInput = "0";
     document.getElementById('paymentDisplay').value = "";
+    showNotification("Wechselgeld berechnet: " + change.toFixed(2).replace(".", ",") + " €", 'info');
 }
 
-// Funktion zum Anzeigen der Benachrichtigung
-function showNotification(message) {
+        function resetTransaction() {
+            cart = [];
+            subtotal = 0;
+            currentInput = "0";
+            paymentInput = "0";
+            multiplyCount = 1;
+            updateDisplay();
+            updateCartDisplay();
+            document.getElementById('paymentDisplay').value = "";
+            document.getElementById('change').textContent = "0,00";
+            showNotification("Transaktion zurückgesetzt");
+        }
+
+        function showNotification(message, type = 'info') {
     const notification = document.getElementById("notification");
     notification.textContent = message;
+    notification.className = 'notification ' + type;
     notification.classList.add("show");
+    
     setTimeout(() => {
         notification.classList.add("slide-out");
     }, 3000);
+    
     setTimeout(() => {
-        notification.classList.remove("show", "slide-out");
+        notification.classList.remove("show", "slide-out", type);
     }, 4000);
 }
-
     </script>
 </body>
 </html>
