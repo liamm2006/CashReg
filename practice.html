@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Practice Modus</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 20px; }
+        #practiceContainer { background-color: #f5f5f5; padding: 20px; border-radius: 8px; width: 100%; max-width: 600px; }
+        #customerOrder { font-size: 24px; margin-bottom: 20px; }
+        #price { font-weight: bold; color: #28a745; }
+        .greenDot { color: green; font-size: 20px; margin-left: 8px; }
+        .button { padding: 10px 20px; font-size: 18px; margin-top: 20px; cursor: pointer; border-radius: 5px; background-color: #007bff; color: #fff; border: none; }
+        .button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Live Practice Modus</h1>
+    <div id="practiceContainer">
+        <p id="customerOrder">Kunde wartet auf Bestellung...</p>
+        <button class="button" onclick="serveCustomer()">Kunde bedienen</button>
+    </div>
+
+    <script>
+const products = [
+    // Bekleidung allgemein (1 bis 10 Euro)
+    { name: "Pullover", price: 8.99, brand: false },
+    { name: "Bluse", price: 5.99, brand: false },
+    { name: "Shorts", price: 6.99, brand: false },
+    { name: "Rock", price: 7.49, brand: false },
+    { name: "Schal", price: 3.99, brand: false },
+    { name: "Strickjacke", price: 9.49, brand: false },
+    
+    // Markenbekleidung (10 bis 60 Euro)
+    { name: "Designer-Jeans", price: 39.99, brand: true },
+    { name: "Marken-T-Shirt", price: 14.99, brand: true },
+    { name: "Marken-Jacke", price: 59.99, brand: true },
+    { name: "Lederjacke", price: 49.99, brand: true },
+    { name: "Marken-Sneaker", price: 44.99, brand: true },
+    { name: "Designer-Mantel", price: 55.00, brand: true },
+    
+    // Deko-Artikel (meistens im Cent-Bereich)
+    { name: "Kerze", price: 0.99, brand: false },
+    { name: "Blumentopf", price: 1.49, brand: false },
+    { name: "Vase", price: 2.99, brand: false },
+    { name: "Kerzenhalter", price: 1.99, brand: false },
+    { name: "Tischdecke", price: 0.49, brand: false },
+    { name: "Bilderrahmen", price: 1.99, brand: false },
+    
+    // Haushalt (1 bis 5 Euro)
+    { name: "Glas", price: 1.29, brand: false },
+    { name: "Teller", price: 1.99, brand: false },
+    { name: "Besteck-Set", price: 3.49, brand: false },
+    { name: "Tasse", price: 0.99, brand: false },
+    { name: "Küchenschüssel", price: 2.49, brand: false },
+    { name: "Kaffeekanne", price: 3.99, brand: false },
+    
+    // Spielwaren (meistens bis 10 Euro)
+    { name: "Puzzle", price: 4.99, brand: false },
+    { name: "Plüschbär", price: 2.99, brand: false },
+    { name: "Brettspiel", price: 7.99, brand: false },
+    { name: "Spielzeugauto", price: 1.49, brand: false },
+    { name: "Marken-Puppe", price: 9.99, brand: true },
+    
+    // Accessoires (2 bis 15 Euro)
+    { name: "Handtasche", price: 8.99, brand: false },
+    { name: "Marken-Rucksack", price: 14.99, brand: true },
+    { name: "Armband", price: 2.49, brand: false },
+    { name: "Kette", price: 3.49, brand: false },
+    { name: "Sonnenbrille", price: 5.99, brand: false },
+    { name: "Marken-Gürtel", price: 12.99, brand: true },
+    
+    // Bücher und Tonträger (unter 5 Euro)
+    { name: "Roman", price: 2.99, brand: false },
+    { name: "Kinderbuch", price: 1.49, brand: false },
+    { name: "CD-Album", price: 1.99, brand: false },
+    { name: "DVD", price: 2.99, brand: false },
+    { name: "Bildband", price: 4.49, brand: false },
+
+];
+
+
+function typeWriter(text, elementId, speed = 50) {
+        let i = 0;
+        const element = document.getElementById(elementId);
+        element.innerHTML = ""; // Setzt den Text zurück
+
+        function type() {
+            // Verarbeitet HTML-Tags korrekt
+            if (i < text.length) {
+                let currentChar = text.charAt(i);
+                
+                // HTML-Tag sofort einsetzen
+                if (currentChar === "<") {
+                    const endTag = text.indexOf(">", i) + 1;
+                    element.innerHTML += text.slice(i, endTag);
+                    i = endTag;
+                } else {
+                    element.innerHTML += currentChar;
+                    i++;
+                }
+                
+                setTimeout(type, speed);
+            }
+        }
+        type();
+    }
+
+    function serveCustomer() {
+        const product = products[Math.floor(Math.random() * products.length)];
+        const greenDot = product.brand ? '<span class="greenDot">●</span>' : '';
+        const text = `Kunde möchte: ${product.name} - <span id="price">${product.price.toFixed(2)} €</span> ${greenDot}`;
+
+        // Typewriter-Effekt anwenden
+        typeWriter(text, "customerOrder");
+    }
+    </script>
+
+<style>
+    body {
+        font-family: 'Merriweather Sans', sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        background-color: #000000;
+        color: #333;
+        justify-content: center;
+    }
+    
+    .container {
+        display: flex;
+        max-width: 1200px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .left-panel, .right-panel {
+        padding: 20px;
+    }
+    
+    .left-panel {
+        flex: 2;
+        border-right: 1px solid #e0e0e0;
+    }
+    
+    .right-panel {
+        flex: 1;
+        background-color: #f9f9f9;
+    }
+
+    h1, h2 {
+        color: #444;
+        margin-bottom: 20px;
+    }
+
+    #display, #paymentDisplay {
+        font-size: 28px;
+        padding: 15px;
+        width: 100%;
+        text-align: right;
+        border: none;
+        background-color: #ecf0f1;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .button-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .button {
+        padding: 15px;
+        font-size: 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background-color: #3d3d3d;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .button:hover {
+        background-color: #17cccc;
+        transform: translateY(-2px);
+    }
+
+    .green-button {
+        background-color: #2ecc71;
+    }
+
+    .green-button:hover {
+        background-color: #27ae60;
+    }
+
+    .red-button {
+        background-color: #e74c3c;
+    }
+
+    .red-button:hover {
+        background-color: #c0392b;
+    }
+
+    .category-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        text-align: left;
+        border: none;
+        border-radius: 8px;
+        background-color: #ecf0f1;
+        color: #2c3e50;
+        transition: all 0.3s ease;
+    }
+
+    .category-button:hover {
+        background-color: #bdc3c7;
+    }
+
+    #cart {
+        margin-top: 30px;
+    }
+
+    #itemsList {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #itemsList li {
+        padding: 10px;
+        background-color: #ecf0f1;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: fadeIn 0.5s ease;
+    }
+
+    #itemsList li button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notification {
+visibility: hidden;
+opacity: 0;
+position: fixed;
+top: 20px;
+right: 20px;
+background-color: #333;
+color: #fff;
+padding: 15px;
+border-radius: 8px;
+font-size: 18px;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+transition: visibility 0s, opacity 0.5s ease, transform 0.5s ease;
+z-index: 100;
+transform: translateX(0);
+}
+
+.notification.show {
+visibility: visible;
+opacity: 1;
+}
+
+.notification.info {
+background-color: #333333;
+color: #fff;
+}
+
+.notification.slide-out {
+transform: translateX(120%);
+}
+
+.notification.alert {
+background-color: #f44336;
+color: #fff;
+animation: blink 0.5s linear infinite;
+}
+
+@keyframes slideOut {
+to { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes blink {
+0% { opacity: 1; }
+50% { opacity: 0; }
+100% { opacity: 1; }
+}
+    
+</style>
+</head>
+<body>
+<a href="index.html" class="button green-button" style="margin-top: 10px;">Zurück zur freie Kasse</a>
+<div class="container">
+    <div class="left-panel">
+        <h1>CashReg 2.1</h1>
+        <input type="text" id="display" disabled placeholder="0,00 €">
+        <div class="button-container">
+            <button class="button" onclick="inputDigit('7')">7</button>
+            <button class="button" onclick="inputDigit('8')">8</button>
+            <button class="button" onclick="inputDigit('9')">9</button>
+            <button class="button" onclick="inputDigit('4')">4</button>
+            <button class="button" onclick="inputDigit('5')">5</button>
+            <button class="button" onclick="inputDigit('6')">6</button>
+            <button class="button" onclick="inputDigit('1')">1</button>
+            <button class="button" onclick="inputDigit('2')">2</button>
+            <button class="button" onclick="inputDigit('3')">3</button>
+            <button class="button" onclick="inputDigit('0')">0</button>
+            <button class="button" onclick="multiply()">x</button>
+            <button class="button red-button" onclick="clearEntry()">Löschen</button>
+            <button class="button" onclick="showSubtotal()">ZWS</button>
+            <button class="button" onclick="resetTransaction()">Reset</button>
+        </div>
+        <div id="cart">
+            <h2>Eingefügte Artikel:</h2>
+            <ul id="itemsList"></ul>
+            <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
+        </div>
+        <h2>Zahlung</h2>
+        <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
+        <div class="button-container">
+            <button class="button" onclick="inputPayment('1')">1</button>
+            <button class="button" onclick="inputPayment('2')">2</button>
+            <button class="button" onclick="inputPayment('3')">3</button>
+            <button class="button" onclick="inputPayment('4')">4</button>
+            <button class="button" onclick="inputPayment('5')">5</button>
+            <button class="button" onclick="inputPayment('6')">6</button>
+            <button class="button" onclick="inputPayment('7')">7</button>
+            <button class="button" onclick="inputPayment('8')">8</button>
+            <button class="button" onclick="inputPayment('9')">9</button>
+            <button class="button" onclick="inputPayment('0')">0</button>
+            <button class="button green-button" onclick="calculateChange()">Wechselgeld</button>
+        </div>
+        <div id="changeOutput">
+            <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
+        </div>
+    </div>
+    <div class="right-panel">
+        <h2>Kategorien</h2>
+        <button class="category-button" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
+        <button class="category-button" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
+        <button class="category-button" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
+        <button class="category-button" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
+        <button class="category-button" onclick="setCategory('Accessoires')">Accessoires</button>
+        <button class="category-button" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
+        <button class="category-button" onclick="setCategory('Porzellan')">Porzellan</button>
+        <button class="category-button" onclick="setCategory('Glas')">Glas</button>
+        <button class="category-button" onclick="setCategory('Haushalt')">Haushalt</button>
+        <button class="category-button" onclick="setCategory('Deko')">Deko</button>
+        <button class="category-button" onclick="setCategory('Bücher')">Bücher</button>
+        <button class="category-button" onclick="setCategory('Spielwaren')">Spielwaren</button>
+        <button class="category-button" onclick="setCategory('Tonträger')">Tonträger</button>
+        <button class="category-button" onclick="setCategory('Spende')">Spende (nur Oben)</button>
+    </div>
+</div>
+<div id="notification" class="notification"></div>
+<script>
+    let cart = [];
+    let subtotal = 0;
+    let currentInput = "0";
+    let paymentInput = "0";
+    let selectedCategory = "Damen Bekleidung";
+    let multiplyCount = 1;
+
+    function inputDigit(digit) {
+        currentInput = (currentInput + digit).replace(/^0+/, "");
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+        document.getElementById('display').value = displayValue + " €";
+    }
+
+    function addItem() {
+const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
+if (isNaN(price) || price <= 0) {
+    showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
+    return;
+}
+cart.push({ price, category: selectedCategory, quantity: multiplyCount });
+subtotal += price;
+currentInput = "0";
+multiplyCount = 1;
+updateDisplay();
+updateCartDisplay();
+}
+
+function updateCartDisplay() {
+const itemsList = document.getElementById('itemsList');
+itemsList.innerHTML = '';
+cart.forEach((item, index) => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
+    itemsList.appendChild(listItem);
+});
+document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+}
+
+    function removeItem(index) {
+        const removedItem = cart.splice(index, 1)[0];
+        subtotal -= removedItem.price;
+        updateCartDisplay();
+        showNotification("Artikel entfernt!");
+    }
+
+    function multiply() {
+        const multiplier = parseInt(currentInput) || 1;
+        multiplyCount = multiplier;
+        currentInput = "0";
+        updateDisplay();
+    }
+
+    function clearEntry() {
+        currentInput = "0";
+        updateDisplay();
+    }
+
+    function setCategory(category) {
+if (currentInput === "0") {
+    showNotification("Bitte geben Sie zuerst einen Preis ein.", "alert");
+    return;
+}
+selectedCategory = category;
+addItem();
+showNotification("Artikel hinzugefügt: " + category);
+}
+
+    function showSubtotal() {
+        currentInput = (subtotal * 100).toString();
+        updateDisplay();
+        showNotification("Zwischensumme: " + subtotal.toFixed(2).replace(".", ",") + " €");
+    }
+
+    function inputPayment(digit) {
+        paymentInput = (paymentInput + digit).replace(/^0+/, "");
+        document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
+    }
+
+    function calculateChange() {
+const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
+if (isNaN(payment) || payment < subtotal) {
+    showNotification("Der gezahlte Betrag ist zu gering oder ungültig.", 'alert');
+    return;
+}
+const change = payment - subtotal;
+document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
+paymentInput = "0";
+document.getElementById('paymentDisplay').value = "";
+showNotification("Wechselgeld berechnet: " + change.toFixed(2).replace(".", ",") + " €", 'info');
+}
+
+    function resetTransaction() {
+        cart = [];
+        subtotal = 0;
+        currentInput = "0";
+        paymentInput = "0";
+        multiplyCount = 1;
+        updateDisplay();
+        updateCartDisplay();
+        document.getElementById('paymentDisplay').value = "";
+        document.getElementById('change').textContent = "0,00";
+        showNotification("Transaktion zurückgesetzt");
+    }
+
+    function showNotification(message, type = 'info') {
+const notification = document.getElementById("notification");
+notification.textContent = message;
+notification.className = 'notification ' + type;
+notification.classList.add("show");
+
+setTimeout(() => {
+    notification.classList.add("slide-out");
+}, 6000);
+
+setTimeout(() => {
+    notification.classList.remove("show", "slide-out", type);
+}, 7000);
+}
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CashReg 2.0</title>
+    <title>CashReg 2.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -74,7 +74,7 @@
         }
 
         .button:hover {
-            background-color: #2980b9;
+            background-color: #17cccc;
             transform: translateY(-2px);
         }
 
@@ -196,9 +196,10 @@
     </style>
 </head>
 <body>
+    <a href="practice.html" class="button green-button" style="margin-top: 10px;">Üben</a>
     <div class="container">
         <div class="left-panel">
-            <h1>CashReg 2.0</h1>
+            <h1>CashReg 2.1</h1>
             <input type="text" id="display" disabled placeholder="0,00 €">
             <div class="button-container">
                 <button class="button" onclick="inputDigit('7')">7</button>
@@ -212,7 +213,6 @@
                 <button class="button" onclick="inputDigit('3')">3</button>
                 <button class="button" onclick="inputDigit('0')">0</button>
                 <button class="button" onclick="multiply()">x</button>
-                <button class="button green-button" onclick="addItem()">Artikel +</button>
                 <button class="button red-button" onclick="clearEntry()">Löschen</button>
                 <button class="button" onclick="showSubtotal()">ZWS</button>
                 <button class="button" onclick="resetTransaction()">Reset</button>
@@ -279,31 +279,18 @@
         }
 
         function addItem() {
-    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2));
+    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
     if (isNaN(price) || price <= 0) {
         showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
         return;
     }
-    cart.push({ 
-        price: price * multiplyCount, 
-        category: selectedCategory, 
-        quantity: multiplyCount 
-    });
-    subtotal += price * multiplyCount;
-    currentInput = "0";
-    multiplyCount = 1;
-    updateDisplay();
-    updateCartDisplay();
-    showNotification("Artikel hinzugefügt!");
-}
-
-    cart.push({ price, category: selectedCategory });
+    cart.push({ price, category: selectedCategory, quantity: multiplyCount });
     subtotal += price;
     currentInput = "0";
     multiplyCount = 1;
     updateDisplay();
     updateCartDisplay();
-    showNotification("Artikel hinzugefügt: " + selectedCategory + " - " + price.toFixed(2).replace(".", ",") + " €", 'info');
+}
 
 function updateCartDisplay() {
     const itemsList = document.getElementById('itemsList');
@@ -336,8 +323,13 @@ function updateCartDisplay() {
         }
 
         function setCategory(category) {
+    if (currentInput === "0") {
+        showNotification("Bitte geben Sie zuerst einen Preis ein.", "alert");
+        return;
+    }
     selectedCategory = category;
-    showNotification("Kategorie gesetzt auf: " + category, 'info');
+    addItem();
+    showNotification("Artikel hinzugefügt: " + category);
 }
 
         function showSubtotal() {
@@ -385,11 +377,11 @@ function updateCartDisplay() {
     
     setTimeout(() => {
         notification.classList.add("slide-out");
-    }, 3000);
+    }, 6000);
     
     setTimeout(() => {
         notification.classList.remove("show", "slide-out", type);
-    }, 4000);
+    }, 7000);
 }
     </script>
 </body>
