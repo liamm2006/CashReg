@@ -24,7 +24,7 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            overflow: hidden;
+            overflow: auto;
         }
         
         .left-panel, .right-panel {
@@ -201,11 +201,10 @@
     </style>
 </head>
 <body>
-    <a href="practice.html" class="button green-button" style="margin-bottom: 1900px;">Üben</a>
-    <button class="button green-button" style="margin-bottom: 1900px;" onclick="toggleFullscreen()">Vollbild</button>
-
     <div class="container">
         <div class="left-panel">
+            <a href="practice.html" class="button green-button">Üben</a>
+            <button class="button green-button"onclick="toggleFullscreen()">Vollbild</button>
             <h1>CashReg 2.1</h1>
             <input type="text" id="display" disabled placeholder="0,00 €">
             <div class="button-container">
@@ -390,8 +389,7 @@ function updateCartDisplay() {
         notification.classList.remove("show", "slide-out", type);
     }, 7000);
 }
-
-function toggleFullscreen() {
+    function toggleFullscreen() {
         const elem = document.querySelector('body');
         if (!document.fullscreenElement) {
             elem.requestFullscreen().catch(err => {
