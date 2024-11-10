@@ -88,49 +88,84 @@ const products = [
 
 
 function typeWriter(text, elementId, speed = 50) {
-        let i = 0;
-        const element = document.getElementById(elementId);
-        element.innerHTML = ""; // Setzt den Text zurück
+    let i = 0;
+    const element = document.getElementById(elementId);
+    element.innerHTML = ""; // Setzt den Text zurück
 
-        function type() {
-            if (i < text.length) {
-                let currentChar = text.charAt(i);
+    function type() {
+        if (i < text.length) {
+            let currentChar = text.charAt(i);
 
-                // HTML-Tag sofort einsetzen
-                if (currentChar === "<") {
-                    const endTag = text.indexOf(">", i) + 1;
-                    element.innerHTML += text.slice(i, endTag);
-                    i = endTag;
-                } else {
-                    element.innerHTML += currentChar;
-                    i++;
-                }
-
-                setTimeout(type, speed);
+            // HTML-Tag sofort einsetzen
+            if (currentChar === "<") {
+                const endTag = text.indexOf(">", i) + 1;
+                element.innerHTML += text.slice(i, endTag);
+                i = endTag;
+            } else {
+                element.innerHTML += currentChar;
+                i++;
             }
+
+            setTimeout(type, speed);
         }
-        type();
+    }
+    type();
+}
+
+function serveCustomer() {
+    // Bestimmt die Anzahl der Artikel, aber mit einer Gewichtung, um kleinere Bestellungen zu bevorzugen
+    const numItems = Math.floor(Math.random() * 7) + 1; // Häufiger zwischen 1 und 7 Artikeln
+    let orderText = "Kunde möchte:<br>";
+    let totalPrice = 0;
+
+    // Verwende ein Objekt, um die Artikel und ihre Mengen zu speichern
+    const orderItems = {};
+
+    for (let i = 0; i < numItems; i++) {
+        const product = products[Math.floor(Math.random() * products.length)];
+        const quantity = Math.floor(Math.random() * 3) + 1; // Anzahl der Artikel, meist 1 bis 3 (reduziert die Wahrscheinlichkeit von größeren Mengen)
+        const itemTotal = product.price * quantity;
+
+        if (orderItems[product.name]) {
+            // Wenn das Produkt schon im Warenkorb ist, erhöhe die Menge und den Preis
+            orderItems[product.name].quantity += quantity;
+            orderItems[product.name].total += itemTotal;
+        } else {
+            // Andernfalls füge das Produkt hinzu
+            orderItems[product.name] = {
+                quantity: quantity,
+                total: itemTotal,
+                greenDot: product.brand ? '<span class="greenDot">●</span>' : ''
+            };
+        }
+        
+        totalPrice += itemTotal;
     }
 
-    function serveCustomer() {
-        const numItems = Math.floor(Math.random() * 15) + 1; // Zufällige Anzahl von Artikeln (1 bis 15)
-        let orderText = "Kunde möchte:<br>";
-        let totalPrice = 0;
-
-        for (let i = 0; i < numItems; i++) {
-            const product = products[Math.floor(Math.random() * products.length)];
-            const greenDot = product.brand ? '<span class="greenDot">●</span>' : '';
-            totalPrice += product.price;
-
-            orderText += `${product.name} - <span>${product.price.toFixed(2)} €</span> ${greenDot}<br>`;
-        }
-
-        typeWriter(orderText, "customerOrder");
-
-        // Zufälliger Betrag, den der Kunde gibt (leicht über dem Gesamtpreis)
-        const customerPayment = (Math.ceil(totalPrice) + Math.floor(Math.random() * 10) + 1).toFixed(2);
-        typeWriter(`Kunde gibt dir: <span id="payment">${customerPayment} €</span>`, "customerPayment");
+    // Gehe durch das orderItems-Objekt und erstelle den Bestelltext
+    for (const [productName, details] of Object.entries(orderItems)) {
+        orderText += `${details.quantity}x ${productName} - <span>${details.total.toFixed(2)} €</span> ${details.greenDot}<br>`;
     }
+
+    typeWriter(orderText, "customerOrder");
+
+    // Zufälliger Betrag, den der Kunde gibt (leicht über dem Gesamtpreis)
+    // Wenn totalPrice sehr niedrig ist, wird der Kunde immer noch einen höheren Betrag zahlen, aber nicht extrem viel
+    let customerPayment = totalPrice;
+    if (totalPrice < 50) {
+        // Häufiger in einem Bereich unter 50 € zahlen
+        customerPayment += Math.floor(Math.random() * 10) + 1;
+    } else {
+        // Selten auch mehr als 100 €
+        customerPayment += Math.floor(Math.random() * 20) + 10;
+    }
+
+    // Sicherstellen, dass der Betrag nie zu niedrig oder zu hoch ist
+    customerPayment = Math.max(0, Math.min(150, customerPayment)).toFixed(2);
+    typeWriter(`Kunde gibt dir: <span id="payment">${customerPayment} €</span>`, "customerPayment");
+}
+
+
     </script>
 
 <style>
