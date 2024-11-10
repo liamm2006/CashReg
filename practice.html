@@ -80,10 +80,8 @@ const products = [
     { name: "DVD", price: 2.90, brand: false },
     { name: "Bildband", price: 4.40, brand: false },
 
-        // Gratis
-    { name: "Buch GRATIS", price: 0.00, brand: false },
-    { name: "Kinderbuch GRATIS", price: 0.00, brand: false },
-    { name: "Spielzeug GRATIS", price: 0.00, brand: false },
+    // Fun
+    { name: "Kunde Beschwert sich das Edith zu langsam ist", price: 0.00, brand: false },
 ];
 
 
@@ -135,6 +133,7 @@ function serveCustomer() {
             orderItems[product.name] = {
                 quantity: quantity,
                 total: itemTotal,
+                price: product.price, // Einzelpreis des Produkts
                 greenDot: product.brand ? '<span class="greenDot">●</span>' : ''
             };
         }
@@ -144,7 +143,8 @@ function serveCustomer() {
 
     // Gehe durch das orderItems-Objekt und erstelle den Bestelltext
     for (const [productName, details] of Object.entries(orderItems)) {
-        orderText += `${details.quantity}x ${productName} - <span>${details.total.toFixed(2)} €</span> ${details.greenDot}<br>`;
+        // Hier zeigen wir den Preis pro Artikel, anstatt den Gesamtpreis für alle Artikel
+        orderText += `${details.quantity}x ${productName} - <span>${details.price.toFixed(2)} €</span> ${details.greenDot}<br>`;
     }
 
     typeWriter(orderText, "customerOrder");
@@ -164,7 +164,6 @@ function serveCustomer() {
     customerPayment = Math.max(0, Math.min(150, customerPayment)).toFixed(2);
     typeWriter(`Kunde gibt dir: <span id="payment">${customerPayment} €</span>`, "customerPayment");
 }
-
 
     </script>
 
