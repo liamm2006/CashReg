@@ -328,6 +328,7 @@ to { transform: translateX(120%); opacity: 0; }
 </head>
 <body>
 <a href="index.html" class="button green-button" style="margin-top: 10px;">Zurück zur freie Kasse</a>
+<button class="button green-button"onclick="toggleFullscreen()">Vollbild</button>
 <div class="container">
     <div class="left-panel">
         <h1>CashReg 2.1</h1>
@@ -514,6 +515,17 @@ setTimeout(() => {
     notification.classList.remove("show", "slide-out", type);
 }, 7000);
 }
+
+function toggleFullscreen() {
+        const elem = document.querySelector('body');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                console.error(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
 </script>
 
 </body>

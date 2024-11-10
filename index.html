@@ -202,6 +202,8 @@
 </head>
 <body>
     <a href="practice.html" class="button green-button" style="margin-bottom: 1900px;">Üben</a>
+    <button class="button green-button" style="margin-bottom: 1900px;" onclick="toggleFullscreen()">Vollbild</button>
+
     <div class="container">
         <div class="left-panel">
             <h1>CashReg 2.1</h1>
@@ -388,6 +390,18 @@ function updateCartDisplay() {
         notification.classList.remove("show", "slide-out", type);
     }, 7000);
 }
+
+function toggleFullscreen() {
+        const elem = document.querySelector('body');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                console.error(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
     </script>
 </body>
 </html>
