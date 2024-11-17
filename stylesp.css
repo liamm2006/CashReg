@@ -195,3 +195,46 @@ to { transform: translateX(120%); opacity: 0; }
 50% { opacity: 0; }
 100% { opacity: 1; }
 }
+
+#display {
+    position: relative;
+    overflow: hidden; /* Um den Animationseffekt zu beschränken */
+    display: flex; /* Stellt sicher, dass die `span`-Elemente nebeneinander erscheinen */
+    justify-content: flex-end; /* Text wird nach rechts ausgerichtet */
+    font-size: 28px;
+}
+
+#display span {
+    display: inline-block; /* Stellt sicher, dass sie nebeneinander stehen */
+    animation: none; /* Standardmäßig keine Animation */
+    transform-origin: top center;
+    padding: 0 2px; /* Optional: Platz zwischen den Ziffern */
+}
+
+#paymentDisplay, #display {
+    position: relative;
+    overflow: hidden;
+    display: flex; /* Zahlen nebeneinander ausrichten */
+    justify-content: flex-end;
+    font-size: 28px;
+}
+
+#paymentDisplay span, #display span {
+    display: inline-block; /* Zahlen nebeneinander */
+    animation: none;
+    transform-origin: top center;
+    padding: 0 2px;
+}
+
+
+
+@keyframes flip {
+    0% {
+        transform: translateY(-100%) rotateX(190deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(0) rotateX(0deg);
+        opacity: 1;
+    }
+}

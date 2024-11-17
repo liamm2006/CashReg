@@ -71,9 +71,6 @@ const products = [
     { name: "CD-Album", price: 1.90, brand: false },
     { name: "DVD", price: 2.90, brand: false },
     { name: "Bildband", price: 4.40, brand: false },
-
-    // Fun
-    { name: "Kunde Beschwert sich das Edith zu langsam ist", price: 0.00, brand: false },
 ];
 
 
@@ -165,90 +162,103 @@ function serveCustomer() {
     <div class="left-panel">
         <a href="index.html" class="button green-button" style="margin-top: 10px;">Zurück zur freie Kasse</a>
 <button class="button green-button"onclick="toggleFullscreen()">Vollbild</button>
-        <h1>CashReg 2.1</h1>
-        <input type="text" id="display" disabled placeholder="0,00 €">
-        <div class="button-container">
-            <button class="button" onclick="inputDigit('7')">7</button>
-            <button class="button" onclick="inputDigit('8')">8</button>
-            <button class="button" onclick="inputDigit('9')">9</button>
-            <button class="button" onclick="inputDigit('4')">4</button>
-            <button class="button" onclick="inputDigit('5')">5</button>
-            <button class="button" onclick="inputDigit('6')">6</button>
-            <button class="button" onclick="inputDigit('1')">1</button>
-            <button class="button" onclick="inputDigit('2')">2</button>
-            <button class="button" onclick="inputDigit('3')">3</button>
-            <button class="button" onclick="inputDigit('0')">0</button>
-            <button class="button" onclick="multiply()">x</button>
-            <button class="button red-button" onclick="clearEntry()">Löschen</button>
-            <button class="button" onclick="showSubtotal()">ZWS</button>
-            <button class="button" onclick="resetTransaction()">Reset</button>
-        </div>
-        <div id="cart">
-            <h2>Eingefügte Artikel:</h2>
-            <ul id="itemsList"></ul>
-            <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
-        </div>
-        <h2>Zahlung</h2>
-        <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
-        <div class="button-container">
-            <button class="button" onclick="inputPayment('1')">1</button>
-            <button class="button" onclick="inputPayment('2')">2</button>
-            <button class="button" onclick="inputPayment('3')">3</button>
-            <button class="button" onclick="inputPayment('4')">4</button>
-            <button class="button" onclick="inputPayment('5')">5</button>
-            <button class="button" onclick="inputPayment('6')">6</button>
-            <button class="button" onclick="inputPayment('7')">7</button>
-            <button class="button" onclick="inputPayment('8')">8</button>
-            <button class="button" onclick="inputPayment('9')">9</button>
-            <button class="button" onclick="inputPayment('0')">0</button>
-            <button class="button green-button" onclick="calculateChange()">Wechselgeld</button>
-        </div>
-        <div id="changeOutput">
-            <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
-        </div>
-    </div>
-    <div class="right-panel">
-        <h2>Kategorien</h2>
-        <button class="category-button" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
-        <button class="category-button" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
-        <button class="category-button" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
-        <button class="category-button" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
-        <button class="category-button" onclick="setCategory('Accessoires')">Accessoires</button>
-        <button class="category-button" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
-        <button class="category-button" onclick="setCategory('Porzellan')">Porzellan</button>
-        <button class="category-button" onclick="setCategory('Glas')">Glas</button>
-        <button class="category-button" onclick="setCategory('Haushalt')">Haushalt</button>
-        <button class="category-button" onclick="setCategory('Deko')">Deko</button>
-        <button class="category-button" onclick="setCategory('Bücher')">Bücher</button>
-        <button class="category-button" onclick="setCategory('Spielwaren')">Spielwaren</button>
-        <button class="category-button" onclick="setCategory('Tonträger')">Tonträger</button>
-        <button class="category-button" onclick="setCategory('Spende')">Spende (nur Oben)</button>
-    </div>
+<h1>CashReg 2.2</h1>
+<div id="display" class="display">0,00 €</div>
+<div class="button-container">
+    <button class="button" onclick="inputDigit('7')">7</button>
+    <button class="button" onclick="inputDigit('8')">8</button>
+    <button class="button" onclick="inputDigit('9')">9</button>
+    <button class="button" onclick="inputDigit('4')">4</button>
+    <button class="button" onclick="inputDigit('5')">5</button>
+    <button class="button" onclick="inputDigit('6')">6</button>
+    <button class="button" onclick="inputDigit('1')">1</button>
+    <button class="button" onclick="inputDigit('2')">2</button>
+    <button class="button" onclick="inputDigit('3')">3</button>
+    <button class="button" onclick="inputDigit('0')">0</button>
+    <button class="button" onclick="multiply()">x</button>
+    <button class="button red-button" onclick="clearEntry()">Löschen</button>
+    <button class="button" onclick="showSubtotal()">ZWS</button>
+    <button class="button" onclick="resetTransaction()">Storno</button>
+</div>
+<div id="cart">
+    <h2>Eingefügte Artikel:</h2>
+    <ul id="itemsList"></ul>
+    <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
+</div>
+<h2>Zahlung</h2>
+<div id="paymentDisplay" class="display">0,00 €</div>
+<div class="button-container">
+    <button class="button" onclick="inputPayment('1')">1</button>
+    <button class="button" onclick="inputPayment('2')">2</button>
+    <button class="button" onclick="inputPayment('3')">3</button>
+    <button class="button" onclick="inputPayment('4')">4</button>
+    <button class="button" onclick="inputPayment('5')">5</button>
+    <button class="button" onclick="inputPayment('6')">6</button>
+    <button class="button" onclick="inputPayment('7')">7</button>
+    <button class="button" onclick="inputPayment('8')">8</button>
+    <button class="button" onclick="inputPayment('9')">9</button>
+    <button class="button" onclick="inputPayment('0')">0</button>
+    <button class="button green-button" onclick="calculateChange()">Wechselgeld</button>
+</div>
+<div id="changeOutput">
+    <p><strong>Wechselgeld:</strong> <span id="change">0,00</span> €</p>
+</div>
+</div>
+<div class="right-panel">
+<h2>Kategorien</h2>
+<button class="category-button" onclick="setCategory('Damen Bekleidung')">Damen Bekleidung</button>
+<button class="category-button" onclick="setCategory('Herren Bekleidung')">Herren Bekleidung</button>
+<button class="category-button" onclick="setCategory('Kinder Bekleidung')">Kinder Bekleidung</button>
+<button class="category-button" onclick="setCategory('Marken Bekleidung')">Marken Bekleidung</button>
+<button class="category-button" onclick="setCategory('Accessoires')">Accessoires</button>
+<button class="category-button" onclick="setCategory('Heimtextilien')">Heimtextilien</button>
+<button class="category-button" onclick="setCategory('Porzellan')">Porzellan</button>
+<button class="category-button" onclick="setCategory('Glas')">Glas</button>
+<button class="category-button" onclick="setCategory('Haushalt')">Haushalt</button>
+<button class="category-button" onclick="setCategory('Deko')">Deko</button>
+<button class="category-button" onclick="setCategory('Bücher')">Bücher</button>
+<button class="category-button" onclick="setCategory('Spielwaren')">Spielwaren</button>
+<button class="category-button" onclick="setCategory('Tonträger')">Tonträger</button>
+<button class="category-button" onclick="setCategory('Spende')">Spende (nur Oben)</button>
+</div>
 </div>
 <div id="notification" class="notification"></div>
 <script>
-    let cart = [];
-    let subtotal = 0;
-    let currentInput = "0";
-    let paymentInput = "0";
-    let selectedCategory = "Damen Bekleidung";
-    let multiplyCount = 1;
+let cart = [];
+let subtotal = 0;
+let currentInput = "0";
+let paymentInput = "0";
+let selectedCategory = "Damen Bekleidung";
+let multiplyCount = 1;
 
-    function inputDigit(digit) {
-        currentInput = (currentInput + digit).replace(/^0+/, "");
-        updateDisplay();
-    }
+function inputDigit(digit) {
+currentInput = (currentInput + digit).replace(/^0+/, "");
+updateDisplay();
+}
 
-    function updateDisplay() {
-        const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
-        document.getElementById('display').value = displayValue + " €";
-    }
+function updateDisplay() {
+const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+const displayElement = document.getElementById('display');
 
-    function addItem() {
+// Entferne alte Ziffern
+displayElement.innerHTML = '';
+
+// Teile den Text in Zeichen und füge sie mit Animation hinzu
+displayValue.split('').forEach((char) => {
+const span = document.createElement('span');
+span.textContent = char;
+span.style.animation = 'flip 0.6s ease';
+displayElement.appendChild(span);
+});
+}
+
+
+
+function addItem() {
 const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
 if (isNaN(price) || price <= 0) {
-    showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
-    return;
+showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
+return;
 }
 cart.push({ price, category: selectedCategory, quantity: multiplyCount });
 subtotal += price;
@@ -262,58 +272,58 @@ function updateCartDisplay() {
 const itemsList = document.getElementById('itemsList');
 itemsList.innerHTML = '';
 cart.forEach((item, index) => {
-    const listItem = document.createElement('li');
-    listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
-    itemsList.appendChild(listItem);
+const listItem = document.createElement('li');
+listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
+itemsList.appendChild(listItem);
 });
 document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
 }
 
-    function removeItem(index) {
-        const removedItem = cart.splice(index, 1)[0];
-        subtotal -= removedItem.price;
-        updateCartDisplay();
-        showNotification("Artikel entfernt!");
-    }
+function removeItem(index) {
+const removedItem = cart.splice(index, 1)[0];
+subtotal -= removedItem.price;
+updateCartDisplay();
+showNotification("Artikel entfernt!");
+}
 
-    function multiply() {
-        const multiplier = parseInt(currentInput) || 1;
-        multiplyCount = multiplier;
-        currentInput = "0";
-        updateDisplay();
-    }
+function multiply() {
+const multiplier = parseInt(currentInput) || 1;
+multiplyCount = multiplier;
+currentInput = "0";
+updateDisplay();
+}
 
-    function clearEntry() {
-        currentInput = "0";
-        updateDisplay();
-    }
+function clearEntry() {
+currentInput = "0";
+updateDisplay();
+}
 
-    function setCategory(category) {
+function setCategory(category) {
 if (currentInput === "0") {
-    showNotification("Bitte geben Sie zuerst einen Preis ein.", "alert");
-    return;
+showNotification("Bitte geben Sie zuerst einen Preis ein.", "alert");
+return;
 }
 selectedCategory = category;
 addItem();
-showNotification("Artikel hinzugefügt: " + category);
+showNotification("Artikel hinzugefügt: " + category, 'info');
 }
 
-    function showSubtotal() {
-        currentInput = (subtotal * 100).toString();
-        updateDisplay();
-        showNotification("Zwischensumme: " + subtotal.toFixed(2).replace(".", ",") + " €");
-    }
+function showSubtotal() {
+currentInput = (subtotal * 100).toString();
+updateDisplay();
+showNotification("Zwischensumme: " + subtotal.toFixed(2).replace(".", ",") + " €");
+}
 
-    function inputPayment(digit) {
-        paymentInput = (paymentInput + digit).replace(/^0+/, "");
-        document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
-    }
+function inputPayment(digit) {
+paymentInput = (paymentInput + digit).replace(/^0+/, "");
+updatePaymentDisplay();
+}
 
-    function calculateChange() {
+function calculateChange() {
 const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
 if (isNaN(payment) || payment < subtotal) {
-    showNotification("Der gezahlte Betrag ist zu gering oder ungültig.", 'alert');
-    return;
+showNotification("Der gezahlte Betrag ist zu gering oder ungültig.", 'alert');
+return;
 }
 const change = payment - subtotal;
 document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
@@ -322,45 +332,60 @@ document.getElementById('paymentDisplay').value = "";
 showNotification("Wechselgeld berechnet: " + change.toFixed(2).replace(".", ",") + " €", 'info');
 }
 
-    function resetTransaction() {
-        cart = [];
-        subtotal = 0;
-        currentInput = "0";
-        paymentInput = "0";
-        multiplyCount = 1;
-        updateDisplay();
-        updateCartDisplay();
-        document.getElementById('paymentDisplay').value = "";
-        document.getElementById('change').textContent = "0,00";
-        showNotification("Transaktion zurückgesetzt");
-    }
+function resetTransaction() {
+cart = [];
+subtotal = 0;
+currentInput = "0";
+paymentInput = "0";
+multiplyCount = 1;
+updateDisplay();
+updateCartDisplay();
+document.getElementById('paymentDisplay').value = "";
+document.getElementById('change').textContent = "0,00";
+showNotification("Transaktion storniert", 'alert');
+}
 
-    function showNotification(message, type = 'info') {
+function showNotification(message, type = 'info') {
 const notification = document.getElementById("notification");
 notification.textContent = message;
 notification.className = 'notification ' + type;
 notification.classList.add("show");
 
 setTimeout(() => {
-    notification.classList.add("slide-out");
+notification.classList.add("slide-out");
 }, 6000);
 
 setTimeout(() => {
-    notification.classList.remove("show", "slide-out", type);
+notification.classList.remove("show", "slide-out", type);
 }, 7000);
 }
-
 function toggleFullscreen() {
-        const elem = document.querySelector('body');
-        if (!document.fullscreenElement) {
-            elem.requestFullscreen().catch(err => {
-                console.error(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
-            });
-        } else {
-            document.exitFullscreen();
-        }
-    }
-</script>
+const elem = document.querySelector('body');
+if (!document.fullscreenElement) {
+elem.requestFullscreen().catch(err => {
+    console.error(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
+});
+} else {
+document.exitFullscreen();
+}
+}
 
+function updatePaymentDisplay() {
+const paymentValue = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",");
+const paymentDisplayElement = document.getElementById('paymentDisplay');
+
+// Entferne alte Ziffern
+paymentDisplayElement.innerHTML = '';
+
+// Teile den Text in Zeichen und füge sie mit Animation hinzu
+paymentValue.split('').forEach((char) => {
+const span = document.createElement('span');
+span.textContent = char;
+span.style.animation = 'flip 0.6s ease';
+paymentDisplayElement.appendChild(span);
+});
+}
+
+</script>
 </body>
 </html>

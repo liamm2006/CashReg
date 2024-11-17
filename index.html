@@ -15,8 +15,8 @@
         <div class="left-panel">
             <a href="practice.html" class="button green-button">Üben</a>
             <button class="button green-button"onclick="toggleFullscreen()">Vollbild</button>
-            <h1>CashReg 2.1</h1>
-            <input type="text" id="display" disabled placeholder="0,00 €">
+            <h1>CashReg 2.2</h1>
+            <div id="display" class="display">0,00 €</div>
             <div class="button-container">
                 <button class="button" onclick="inputDigit('7')">7</button>
                 <button class="button" onclick="inputDigit('8')">8</button>
@@ -39,7 +39,7 @@
                 <p><strong>Zwischensumme:</strong> <span id="subtotal">0,00</span> €</p>
             </div>
             <h2>Zahlung</h2>
-            <input type="text" id="paymentDisplay" disabled placeholder="0,00 €">
+            <div id="paymentDisplay" class="display">0,00 €</div>
             <div class="button-container">
                 <button class="button" onclick="inputPayment('1')">1</button>
                 <button class="button" onclick="inputPayment('2')">2</button>
@@ -90,9 +90,22 @@
         }
 
         function updateDisplay() {
-            const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
-            document.getElementById('display').value = displayValue + " €";
-        }
+    const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+    const displayElement = document.getElementById('display');
+
+    // Entferne alte Ziffern
+    displayElement.innerHTML = '';
+
+    // Teile den Text in Zeichen und füge sie mit Animation hinzu
+    displayValue.split('').forEach((char) => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.style.animation = 'flip 0.6s ease';
+        displayElement.appendChild(span);
+    });
+}
+
+
 
         function addItem() {
     const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
@@ -155,9 +168,9 @@ function updateCartDisplay() {
         }
 
         function inputPayment(digit) {
-            paymentInput = (paymentInput + digit).replace(/^0+/, "");
-            document.getElementById('paymentDisplay').value = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",") + " €";
-        }
+    paymentInput = (paymentInput + digit).replace(/^0+/, "");
+    updatePaymentDisplay();
+}
 
         function calculateChange() {
     const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
@@ -209,6 +222,22 @@ function updateCartDisplay() {
             document.exitFullscreen();
         }
     }
+
+    function updatePaymentDisplay() {
+    const paymentValue = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",");
+    const paymentDisplayElement = document.getElementById('paymentDisplay');
+
+    // Entferne alte Ziffern
+    paymentDisplayElement.innerHTML = '';
+
+    // Teile den Text in Zeichen und füge sie mit Animation hinzu
+    paymentValue.split('').forEach((char) => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        span.style.animation = 'flip 0.6s ease';
+        paymentDisplayElement.appendChild(span);
+    });
+}
 
     </script>
 </body>
