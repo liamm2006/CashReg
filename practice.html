@@ -6,6 +6,8 @@
     <title>Live Practice Modus</title>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
     <h1>Live Practice Modus</h1>
@@ -346,19 +348,33 @@ showNotification("Transaktion storniert", 'alert');
 }
 
 function showNotification(message, type = 'info') {
-const notification = document.getElementById("notification");
-notification.textContent = message;
-notification.className = 'notification ' + type;
-notification.classList.add("show");
-
-setTimeout(() => {
-notification.classList.add("slide-out");
-}, 6000);
-
-setTimeout(() => {
-notification.classList.remove("show", "slide-out", type);
-}, 7000);
+    const notification = document.getElementById("notification");
+    let icon = '';
+    switch(type) {
+        case 'alert':
+            icon = '<i class="fas fa-exclamation-triangle"></i>';
+            break;
+        case 'info':
+            icon = '<i class="fas fa-info-circle"></i>';
+            break;
+        case 'check':
+            icon = '<i class="fas fa-check-circle"></i>';
+            break;
+    }
+    notification.innerHTML = icon + message;
+    notification.className = 'notification ' + type;
+    notification.classList.add("show");
+    
+    setTimeout(() => {
+        notification.classList.add("slide-out");
+    }, 6000);
+    
+    setTimeout(() => {
+        notification.classList.remove("show", "slide-out", type);
+    }, 7000);
 }
+
+
 function toggleFullscreen() {
 const elem = document.querySelector('body');
 if (!document.fullscreenElement) {
