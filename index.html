@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CashReg</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<link rel="script" href="script.js">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="left-panel">
             <a href="practice.html" class="button green-button">Üben</a>
-            <button class="button green-button"onclick="toggleFullscreen()">Vollbild</button>
-            <h1>CashReg 2.2</h1>
+            <button class="button green-button" onclick="toggleFullscreen()">Vollbild</button>
+            <h1>CashReg 3.0</h1>
             <div id="display" class="display">0,00 €</div>
             <div class="button-container">
                 <button class="button" onclick="inputDigit('7')">7</button>
@@ -75,183 +74,187 @@
             <button class="category-button" onclick="setCategory('Tonträger')">Tonträger</button>
             <button class="category-button" onclick="setCategory('Spende')">Spende (nur Oben)</button>
         </div>
-    </div>
-    <div id="notification" class="notification"></div>
-    <script>
-        let cart = [];
-        let subtotal = 0;
-        let currentInput = "0";
-        let paymentInput = "0";
-        let selectedCategory = "Damen Bekleidung";
-        let multiplyCount = 1;
-
-        function inputDigit(digit) {
-            currentInput = (currentInput + digit).replace(/^0+/, "");
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-    const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
-    const displayElement = document.getElementById('display');
-
-    // Entferne alte Ziffern
-    displayElement.innerHTML = '';
-
-    // Teile den Text in Zeichen und füge sie mit Animation hinzu
-    displayValue.split('').forEach((char) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.style.animation = 'flip 0.6s ease';
-        displayElement.appendChild(span);
-    });
-}
-
-
-
-        function addItem() {
-    const price = parseFloat((parseInt(currentInput) / 100).toFixed(2)) * multiplyCount;
-    if (isNaN(price) || price <= 0) {
-        showNotification("Bitte geben Sie einen gültigen Preis ein.", "alert");
-        return;
-    }
-    cart.push({ price, category: selectedCategory, quantity: multiplyCount });
-    subtotal += price;
-    currentInput = "0";
-    multiplyCount = 1;
-    updateDisplay();
-    updateCartDisplay();
-}
-
-function updateCartDisplay() {
-    const itemsList = document.getElementById('itemsList');
-    itemsList.innerHTML = '';
-    cart.forEach((item, index) => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
-        itemsList.appendChild(listItem);
-    });
-    document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
-}
-
-        function removeItem(index) {
-            const removedItem = cart.splice(index, 1)[0];
-            subtotal -= removedItem.price;
-            updateCartDisplay();
-            showNotification("Artikel entfernt!");
-        }
-
-        function multiply() {
-            const multiplier = parseInt(currentInput) || 1;
-            multiplyCount = multiplier;
-            currentInput = "0";
-            updateDisplay();
-        }
-
-        function clearEntry() {
-            currentInput = "0";
-            updateDisplay();
-        }
-
-        function setCategory(category) {
-    if (currentInput === "0") {
-        showNotification("Bitte geben Sie zuerst einen Preis ein.", "alert");
-        return;
-    }
-    selectedCategory = category;
-    addItem();
-    showNotification("Artikel hinzugefügt: " + category, 'info');
-}
-
-        function showSubtotal() {
-            currentInput = (subtotal * 100).toString();
-            updateDisplay();
-            showNotification("Zwischensumme: " + subtotal.toFixed(2).replace(".", ",") + " €");
-        }
-
-        function inputPayment(digit) {
-    paymentInput = (paymentInput + digit).replace(/^0+/, "");
-    updatePaymentDisplay();
-}
-
-        function calculateChange() {
-    const payment = parseFloat((parseInt(paymentInput) / 100).toFixed(2));
-    if (isNaN(payment) || payment < subtotal) {
-        showNotification("Der gezahlte Betrag ist zu gering oder ungültig.", 'alert');
-        return;
-    }
-    const change = payment - subtotal;
-    document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
-    paymentInput = "0";
-    document.getElementById('paymentDisplay').value = "";
-    showNotification("Wechselgeld berechnet: " + change.toFixed(2).replace(".", ",") + " €", 'info');
-}
-
-        function resetTransaction() {
-            cart = [];
-            subtotal = 0;
-            currentInput = "0";
-            paymentInput = "0";
-            multiplyCount = 1;
-            updateDisplay();
-            updateCartDisplay();
-            document.getElementById('paymentDisplay').value = "";
-            document.getElementById('change').textContent = "0,00";
-            showNotification("Transaktion storniert", 'alert');
-        }
-
-        function showNotification(message, type = 'info') {
-    const notification = document.getElementById("notification");
-    let icon = '';
-    switch(type) {
-        case 'alert':
-            icon = '<i class="fas fa-exclamation-triangle"></i>';
-            break;
-        case 'info':
-            icon = '<i class="fas fa-info-circle"></i>';
-            break;
-        case 'check':
-            icon = '<i class="fas fa-check-circle"></i>';
-            break;
-    }
-    notification.innerHTML = icon + message;
-    notification.className = 'notification ' + type;
-    notification.classList.add("show");
     
-    setTimeout(() => {
-        notification.classList.add("slide-out");
-    }, 6000);
-    
-    setTimeout(() => {
-        notification.classList.remove("show", "slide-out", type);
-    }, 7000);
-}
-    function toggleFullscreen() {
-        const elem = document.querySelector('body');
-        if (!document.fullscreenElement) {
-            elem.requestFullscreen().catch(err => {
-                console.error(`Fehler beim Aktivieren des Vollbildmodus: ${err.message}`);
+        <div class="notification-container"></div>
+        <script>
+            let cart = [];
+            let subtotal = 0;
+            let currentInput = "0";
+            let paymentInput = "0";
+            let selectedCategory = "Damen Bekleidung";
+            let multiplyCount = 1;
+            let notificationSystem;
+
+            function inputDigit(digit) {
+                currentInput = currentInput === "0" ? digit : currentInput + digit;
+                updateDisplay();
+            }
+
+            function updateDisplay() {
+                const displayValue = (parseInt(currentInput) / 100).toFixed(2).replace(".", ",");
+                const displayElement = document.getElementById('display');
+                displayElement.innerHTML = displayValue.split('').map(char => 
+                    `<span style="animation: flip 0.6s ease">${char}</span>`
+                ).join('');
+            }
+
+            function inputPayment(digit) {
+                paymentInput = paymentInput === "0" ? digit : paymentInput + digit;
+                updatePaymentDisplay();
+            }
+
+            function updatePaymentDisplay() {
+                const paymentValue = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",");
+                const paymentDisplayElement = document.getElementById('paymentDisplay');
+                paymentDisplayElement.innerHTML = paymentValue.split('').map(char => 
+                    `<span style="animation: flip 0.6s ease">${char}</span>`
+                ).join('');
+            }
+
+            function addItem() {
+                const price = (parseInt(currentInput) / 100) * multiplyCount;
+                if (isNaN(price) || price <= 0) {
+                    notificationSystem.show("Bitte geben Sie einen gültigen Preis ein.", "alert");
+                    return;
+                }
+                cart.push({ price, category: selectedCategory, quantity: multiplyCount });
+                subtotal += price;
+                currentInput = "0";
+                multiplyCount = 1;
+                updateDisplay();
+                updateCartDisplay();
+            }
+
+            function updateCartDisplay() {
+                const itemsList = document.getElementById('itemsList');
+                itemsList.innerHTML = '';
+                cart.forEach((item, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Artikel ${index + 1}: ${item.category} - ${item.price.toFixed(2).replace(".", ",")} € (${item.quantity}x)`;
+                    itemsList.appendChild(listItem);
+                });
+                document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace(".", ",");
+            }
+
+            function multiply() {
+                multiplyCount = parseInt(currentInput) || 1;
+                currentInput = "0";
+                updateDisplay();
+            }
+
+            function clearEntry() {
+                currentInput = "0";
+                updateDisplay();
+            }
+
+            function setCategory(category) {
+                if (currentInput === "0") {
+                    notificationSystem.show("Bitte geben Sie zuerst einen Preis ein.", "alert");
+                    return;
+                }
+                selectedCategory = category;
+                addItem();
+                notificationSystem.show("Artikel hinzugefügt: " + category, 'info');
+            }
+
+            function calculateChange() {
+                const payment = parseInt(paymentInput) / 100;
+                if (isNaN(payment) || payment < subtotal) {
+                    notificationSystem.show("Der gezahlte Betrag ist ungültig oder zu niedrig!", 'alert');
+                    return;
+                }
+                const change = payment - subtotal;
+                document.getElementById('change').textContent = change.toFixed(2).replace(".", ",");
+                paymentInput = "0";
+                updatePaymentDisplay();
+                notificationSystem.show(`Wechselgeld: ${change.toFixed(2).replace(".", ",")} €`, 'success');
+            }
+
+            function resetTransaction() {
+                cart = [];
+                subtotal = 0;
+                currentInput = "0";
+                paymentInput = "0";
+                multiplyCount = 1;
+                updateDisplay();
+                updateCartDisplay();
+                updatePaymentDisplay();
+                document.getElementById('change').textContent = "0,00";
+                notificationSystem.show("Transaktion storniert", 'warning');
+            }
+
+            class NotificationSystem {
+                constructor() {
+                    this.container = document.querySelector('.notification-container');
+                    this.queue = [];
+                }
+
+                show(message, type = 'info') {
+                    const notification = this.createNotification(message, type);
+                    this.queue.push(notification);
+                    if (this.queue.length === 1) this.animate();
+                }
+
+                createNotification(message, type) {
+                    const notification = document.createElement('div');
+                    notification.className = `notification ${type}`;
+                    notification.innerHTML = `
+                        <div class="notification-icon">${this.getIcon(type)}</div>
+                        <div class="notification-content">${message}</div>
+                        <div class="progress-bar"><div class="progress"></div></div>
+                    `;
+                    notification.addEventListener('click', () => this.dismiss(notification));
+                    return notification;
+                }
+
+                getIcon(type) {
+                    const icons = {
+                        alert: '<i class="fas fa-exclamation-circle"></i>',
+                        info: '<i class="fas fa-info-circle"></i>',
+                        success: '<i class="fas fa-check-circle"></i>',
+                        warning: '<i class="fas fa-exclamation-triangle"></i>'
+                    };
+                    return icons[type] || '';
+                }
+
+                animate() {
+                    const notification = this.queue[0];
+                    this.container.appendChild(notification);
+                    notification.classList.add('active');
+
+                    const dismissTimer = setTimeout(() => this.dismiss(notification), 5000);
+                    
+                    notification.addEventListener('mouseenter', () => clearTimeout(dismissTimer));
+                    notification.addEventListener('mouseleave', () => {
+                        if (!notification.classList.contains('exit')) {
+                            setTimeout(() => this.dismiss(notification), 5000);
+                        }
+                    });
+                }
+
+                dismiss(notification, delay = 300) {
+                    notification.classList.add('exit');
+                    setTimeout(() => {
+                        notification.remove();
+                        this.queue.shift();
+                        if (this.queue.length > 0) this.animate();
+                    }, delay);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                notificationSystem = new NotificationSystem();
+                notificationSystem.show("Kasse bereit", 'success');
             });
-        } else {
-            document.exitFullscreen();
-        }
-    }
 
-    function updatePaymentDisplay() {
-    const paymentValue = (parseInt(paymentInput) / 100).toFixed(2).replace(".", ",");
-    const paymentDisplayElement = document.getElementById('paymentDisplay');
-
-    // Entferne alte Ziffern
-    paymentDisplayElement.innerHTML = '';
-
-    // Teile den Text in Zeichen und füge sie mit Animation hinzu
-    paymentValue.split('').forEach((char) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.style.animation = 'flip 0.6s ease';
-        paymentDisplayElement.appendChild(span);
-    });
-}
-
-    </script>
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        </script>
+    </div>
 </body>
 </html>
